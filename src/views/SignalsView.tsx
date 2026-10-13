@@ -16,7 +16,7 @@ export const SignalsView: React.FC = () => {
         <div>
           <h1 className="text-xl font-bold text-slate-900 tracking-tight">Signal Radar & Heuristics</h1>
           <p className="text-xs text-slate-500 mt-0.5">
-            Continuous deterministic anomaly detection evaluating cashflow thresholds, dead stock, and credit risk
+            Continuous deterministic anomaly detection evaluating cashflow thresholds, supplier cliff horizons, and liquidity buffers
           </p>
         </div>
         <Badge variant="rose" size="md">

@@ -87,7 +87,7 @@ export const IngestionView: React.FC = () => {
         </div>
 
         <p className="text-xs text-slate-300 leading-relaxed max-w-4xl">
-          Merchants <strong>connect once</strong>, after which MerchantMind continuously evaluates payments, bank balance, Paytm telemetry, Khata, and stock velocity. <strong>Manual imports are never required daily</strong>—they exist strictly for:
+          Merchants <strong>connect once</strong>, after which MerchantMind continuously evaluates payments, bank balance, Paytm telemetry, and upcoming supplier liabilities. <strong>Manual imports are never required daily</strong>—they exist strictly for:
         </p>
 
         {/* 5 Specific Manual Use Cases */}
@@ -98,7 +98,7 @@ export const IngestionView: React.FC = () => {
           </div>
           <div className="p-2.5 bg-slate-800/80 rounded-xl border border-slate-700/80 text-center">
             <span className="text-indigo-300 block text-[11px]">2. Initial Onboarding</span>
-            <span className="text-[10px] text-slate-400 font-normal mt-0.5 block">Bulk customer Khata</span>
+            <span className="text-[10px] text-slate-400 font-normal mt-0.5 block">Customer Directory CSV</span>
           </div>
           <div className="p-2.5 bg-slate-800/80 rounded-xl border border-slate-700/80 text-center">
             <span className="text-indigo-300 block text-[11px]">3. Reconciliation</span>

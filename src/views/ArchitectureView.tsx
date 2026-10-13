@@ -34,7 +34,7 @@ export const ArchitectureView: React.FC = () => {
       name: 'DATA SOURCES',
       badge: 'Multi-Stream Feeds',
       color: 'border-indigo-500/40 text-indigo-400',
-      description: 'Paytm All-In-One QR standees, Soundbox audio triggers, SBI Current Account NetBanking (via Account Aggregator), Retail Smart POS, and Tally Prime / Khata ledgers.',
+      description: 'Paytm All-In-One QR standees, Soundbox audio triggers, SBI Current Account NetBanking (via Account Aggregator), Retail Smart POS, and wholesale supplier invoices.',
       scenarioSpec: 'Ingests Abhishek’s 42 daily Paytm QR transactions, bank balance, and wholesale invoice BILL-SUP-201 from Sharma Telecom.',
     },
     {
@@ -43,7 +43,7 @@ export const ArchitectureView: React.FC = () => {
       badge: 'Edge Handlers',
       color: 'border-indigo-500/40 text-indigo-400',
       description: 'Lightweight daemon bridges and webhook receivers establishing mutual mTLS channels and streaming raw payload batches.',
-      scenarioSpec: 'Paytm webhook receiver, SBI Account Aggregator polling daemon, and Tally XML local bridge.',
+      scenarioSpec: 'Paytm webhook receiver, SBI Account Aggregator polling daemon, and supplier invoice connectors.',
     },
     {
       step: '03',
@@ -58,8 +58,8 @@ export const ArchitectureView: React.FC = () => {
       name: 'NORMALIZATION',
       badge: 'Schema Translation',
       color: 'border-cyan-500/40 text-cyan-400',
-      description: 'Maps heterogeneous provider formats into standardized financial primitives (Transaction, LedgerEntry, InvoiceObligation, InventoryItem).',
-      scenarioSpec: 'Translates Paytm QR callbacks and Tally purchase vouchers into a common normalized structure.',
+      description: 'Maps heterogeneous provider formats into standardized financial primitives (Transaction, LedgerEntry, InvoiceObligation, SupplierPayable).',
+      scenarioSpec: 'Translates Paytm QR callbacks and supplier purchase vouchers into a common normalized structure.',
     },
     {
       step: '05',
@@ -67,7 +67,7 @@ export const ArchitectureView: React.FC = () => {
       badge: 'Single Source of Truth',
       color: 'border-cyan-500/40 text-cyan-400',
       description: 'Unified relational and time-series model maintaining immutable lineage, balance tables, and historical audit entries.',
-      scenarioSpec: 'Reconciles ₹40,607 liquid bank balance, ₹45,000 Sharma Telecom payable, and ₹3,700 overdue Khata ledgers.',
+      scenarioSpec: 'Reconciles ₹40,607 liquid bank balance, ₹45,000 Sharma Telecom payable, and rolling 14-day cashflow trajectories.',
     },
     {
       step: '06',
@@ -82,8 +82,8 @@ export const ArchitectureView: React.FC = () => {
       name: 'SIGNALS',
       badge: 'Deterministic Anomaly Triggers',
       color: 'border-rose-500/40 text-rose-400',
-      description: 'Autonomous heuristic radar firing signals when liabilities exceed available cash, customer ledgers pass 30 days, or inventory stagnates 45+ days.',
-      scenarioSpec: 'Generates SIG-LIQ-CLIFF (-₹4,393 on Oct 9) and SIG-REC-OVERDUE (₹3,700 trapped in Amit & Neha ledgers).',
+      description: 'Autonomous heuristic radar firing signals when liabilities exceed available cash or cash drops below minimum operating buffers.',
+      scenarioSpec: 'Generates SIG-LIQ-CLIFF (-₹4,393 on Oct 9) and SIG-CASH-BUFFER (operating cash below safe target).',
     },
     {
       step: '08',
@@ -91,23 +91,23 @@ export const ArchitectureView: React.FC = () => {
       badge: 'Multi-Criteria Ranking',
       color: 'border-amber-500/40 text-amber-400',
       description: 'Formulates and prioritizes quantified financial interventions by weighing recovery potential, relationship risk, and execution turnaround.',
-      scenarioSpec: 'Formulates OPP-01: Bridge the ₹4,393 cliff via ₹3,700 Khata recovery + ₹7,800 dead stock clearance (+₹11,500 total).',
+      scenarioSpec: 'Formulates OPP-01: Bridge the ₹4,393 cliff via 7-day payment tranche split (₹25K on Oct 9 + ₹20K on Oct 16, yielding +₹20K deferral buffer).',
     },
     {
       step: '09',
       name: 'DECISION / ACTION ENGINE',
       badge: 'Human-in-the-Loop Gateway',
       color: 'border-emerald-500/40 text-emerald-400',
-      description: 'Compiles executable dispatch payloads (WhatsApp reminders with dynamic Paytm UPI paylinks, flash sale standees) requiring explicit merchant approval.',
-      scenarioSpec: 'Presents 1-click approval for Action #ACT-024 to Amit Verma (₹2,200). Never executes disbursements without proprietor consent.',
+      description: 'Compiles executable dispatch payloads (supplier restructuring proposals and customer loyalty campaigns) requiring explicit merchant approval.',
+      scenarioSpec: 'Presents 1-click approval for Action #ACT-03 to Sharma Telecom (₹20,000 split deferral). Never executes disbursements without proprietor consent.',
     },
     {
       step: '10',
       name: 'OUTCOME MEASUREMENT',
       badge: 'Closed-Loop Verification',
       color: 'border-emerald-500/40 text-emerald-400',
-      description: 'Monitors downstream inbound banking settlements and inventory decrements to verify actual delta against projected recovery.',
-      scenarioSpec: 'Confirms ₹3,700 Khata credit and ₹7,800 stock clearance, lifting Abhishek’s position from -₹4,393 to +₹7,107 safe buffer.',
+      description: 'Monitors downstream inbound banking settlements and outbound supplier disbursements to verify actual delta against projected recovery.',
+      scenarioSpec: 'Confirms payment split execution, securing Abhishek\'s position from -₹4,393 to +₹15,607 safe cushion.',
     },
   ];
 
@@ -165,7 +165,7 @@ export const ArchitectureView: React.FC = () => {
             </Badge>
           </div>
           <p className="text-xs text-slate-600 leading-relaxed">
-            All financial calculations, ledger balances, cash deficits, Khata aging periods, and invoice due dates are executed by <strong>deterministic algorithms</strong>.
+            All financial calculations, ledger balances, cash deficits, supplier runway trajectories, and invoice due dates are executed by <strong>deterministic algorithms</strong>.
             <strong>LLMs do NOT calculate numbers, invent balances, or make financial decisions.</strong> Every calculation is 100% reproducible and auditable.
           </p>
           <div className="p-2.5 bg-white/80 rounded-lg border border-emerald-200 text-[11px] font-mono text-emerald-800 space-y-1">

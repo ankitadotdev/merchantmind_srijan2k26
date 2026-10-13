@@ -71,9 +71,9 @@ export const GuidedTourModal: React.FC = () => {
             India’s 63M+ retail merchants lack real-time runway visibility:
           </p>
           <ul className="space-y-1 text-slate-600 list-disc list-inside text-[11px]">
-            <li>Customer Khata delays collide with wholesale supplier maturities</li>
+            <li>Wholesale supplier payment maturities collide with daily operational cashflow</li>
             <li>No dedicated CFO, accounting staff, or real-time runway tools</li>
-            <li>Forced into emergency 24–36% APR credit or inventory stockouts</li>
+            <li>Forced into emergency high-interest credit or supplier relationship strain</li>
           </ul>
           <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-600">
             <strong className="text-slate-800">MerchantMind&rsquo;s Mission:</strong> Connect everyday business signals into explainable, automated foresight before capital cliffs occur.
@@ -113,7 +113,7 @@ export const GuidedTourModal: React.FC = () => {
             </div>
           </div>
           <p className="text-slate-500 text-[11px]">
-            Profitable on paper, but everyday cash is trapped across customer credit and slow-moving shelf stock.
+            Profitable on paper, but upcoming wholesale supplier obligations create acute cashflow cliffs.
           </p>
         </div>
       ),

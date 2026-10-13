@@ -70,7 +70,7 @@ export const CashflowView: React.FC = () => {
                 <tr>
                   <th className="px-3.5 py-2.5 text-left">Date</th>
                   <th className="px-3 py-2.5 text-left">Day</th>
-                  <th className="px-3 py-2.5 text-right">Inflow (Sales/Khata)</th>
+                  <th className="px-3 py-2.5 text-right">Inflow (Sales/UPI)</th>
                   <th className="px-3 py-2.5 text-right">Outflow (Bills/Rent)</th>
                   <th className="px-3 py-2.5 text-right">Net Daily</th>
                   <th className="px-3.5 py-2.5 text-right">Projected Balance</th>

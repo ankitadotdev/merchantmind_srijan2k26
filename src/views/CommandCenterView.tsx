@@ -20,6 +20,8 @@ import {
   Mic,
   MessageSquare,
   Volume2,
+  Users,
+  Link2,
 } from 'lucide-react';
 import { useMerchant } from '../context/MerchantContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
@@ -460,15 +462,15 @@ export const CommandCenterView: React.FC = () => {
             </button>
 
             <button
-              onClick={() => setActiveAppTab('receivables')}
+              onClick={() => setActiveAppTab('customers')}
               className="p-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-left transition-colors cursor-pointer"
             >
               <div className="flex items-center justify-between">
-                <BookOpen className="w-4 h-4 text-emerald-600" />
+                <Users className="w-4 h-4 text-emerald-600" />
                 <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
               </div>
-              <span className="text-xs font-bold text-slate-900 block mt-2">Customer Khata</span>
-              <span className="text-[10px] text-slate-500">5 active ledgers</span>
+              <span className="text-xs font-bold text-slate-900 block mt-2">Customers (RFM)</span>
+              <span className="text-[10px] text-slate-500">Repeat analytics</span>
             </button>
 
             <button
@@ -484,15 +486,15 @@ export const CommandCenterView: React.FC = () => {
             </button>
 
             <button
-              onClick={() => setActiveAppTab('inventory')}
+              onClick={() => setActiveAppTab('connections')}
               className="p-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-left transition-colors cursor-pointer"
             >
               <div className="flex items-center justify-between">
-                <Package className="w-4 h-4 text-amber-600" />
+                <Link2 className="w-4 h-4 text-cyan-600" />
                 <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
               </div>
-              <span className="text-xs font-bold text-slate-900 block mt-2">Inventory Stock</span>
-              <span className="text-[10px] text-slate-500">Dead stock alerts</span>
+              <span className="text-xs font-bold text-slate-900 block mt-2">Integrations</span>
+              <span className="text-[10px] text-slate-500">Paytm & SBI linked</span>
             </button>
           </div>
         </div>
