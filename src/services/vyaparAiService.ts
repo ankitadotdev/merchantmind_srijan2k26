@@ -1,9 +1,3 @@
-// ============================================================================
-// MERCHANTMIND — PAYTM VYAPAR AI SAHAYAK (CONVERSATIONAL ENGINE)
-// ============================================================================
-// Deterministic business partner tailored for Bharat retail merchants.
-// Supports both English & colloquial Hinglish/Hindi shopkeeper dialogue.
-// Strictly non-regulated operational advice (Supplier payment split, distributor volume rebate, cashflow cliff warnings).
 ﻿// ============================================================================
 // MERCHANTMIND — ADVANCED PAYTM VYAPAR AI SAHAYAK (CONVERSATIONAL ENGINE)
 // ============================================================================
@@ -15,8 +9,9 @@
 import type {
   FinancialHealthMetrics,
   CashflowDatapoint,
+  ReceivableRecord,
   PayableRecord,
-  CustomerProfile,
+  InventoryItem,
   BusinessSignal,
   RecommendedAction,
   MerchantProfile,
@@ -51,8 +46,8 @@ export interface MerchantContextSnapshot {
   profile: MerchantProfile | null;
   financialHealth: FinancialHealthMetrics | null;
   cashflow: CashflowDatapoint[];
+  receivables: ReceivableRecord[];
   payables: PayableRecord[];
-  customers: CustomerProfile[];
   inventory: InventoryItem[];
   customers?: CustomerProfile[];
   signals: BusinessSignal[];
@@ -66,8 +61,6 @@ export function generateVyaparAssistantResponse(
   const query = userQuery.toLowerCase().trim();
   const name = context.profile?.proprietor?.split(' ')[0] || 'Abhishek';
   const cash = context.financialHealth?.availableCash || 40607;
-  const urgentPayables = context.payables.filter(p => p.isCliff || p.priority === 'URGENT');
-  const totalUrgent = urgentPayables.reduce((acc, p) => acc + p.amount, 0);
   const overdueKhata = context.receivables.filter((r) => r.status === 'OVERDUE');
   const totalOverdue = overdueKhata.reduce((acc, r) => acc + r.outstandingAmount, 0);
   const deadStock = context.inventory.filter((i) => i.status === 'DEAD_STOCK');
@@ -88,10 +81,6 @@ export function generateVyaparAssistantResponse(
     query.includes('architecture')
   ) {
     return {
-      textEn: `Hello ${name}! Today Abhishek Mobile has ₹${cash.toLocaleString('en-IN')} available cash. Your Paytm Soundbox registered 42 counter sales, but Sharma Telecom's ₹45,000 wholesale bill is due in 5 days with a -₹4,393 cash gap. We have an approved 7-day payment split proposal (+₹20,000 buffer) ready to dispatch.`,
-      textHi: `Ram Ram ${name} bhai! Dukan ke SBI khate me abhi ₹${cash.toLocaleString('en-IN')} cash hai aur Paytm QR se lagatar grahak payment kar rahe hain. Lekin 5 din baad Sharma Telecom ko ₹45,000 ka bill dena hai aur khate me ₹4,393 kam pad rahe hain. Sharma Telecom ke sath 7-din ka payment split (+₹20,000 safe buffer) ka prastav taiyar hai.`,
-      audioSpeechEn: `Hello ${name}. You have ₹40,607 cash, but Sharma Telecom's ₹45,000 bill is due in 5 days. Let's activate the 7-day payment split today.`,
-      audioSpeechHi: `${name} bhai, dukan par ₹40,607 cash hai. 5 din baad Sharma Telecom ko ₹45,000 dene hain. Chaliye 7-din ka payment split bhejte hain.`,
       textEn: `MerchantMind implements a strict 3-Tier Decoupled Architecture to eliminate hallucinations:\n1. Ingestion Layer: Connects directly to verified Paytm Soundbox webhooks, SBI feeds, and Khata records.\n2. Deterministic Arithmetic Core: 100% of cash balances, aging buckets, and -₹4,393 cliff gaps are computed in verifiable TypeScript rules—zero LLM calculations.\n3. Natural Language Overlay: AI is strictly constrained to translating and explaining verified math into Hindi/English. Every statement links to primary audit records (BILL-SUP-201, INV-REC-101).`,
       textHi: `MerchantMind me financial calculation me ZERO AI HALLUCINATION ki guarantee hai:\n1. Pura mathematical hisab (₹40,607 cash, ₹45,000 bill, -₹4,393 deficit) deterministic code se calculate hota hai, kisi generative AI se nahi.\n2. AI ka kaam sirf is verified data ko aam dukandaar ki bhasha (Hindi/Hinglish) me samjhana hai.\n3. Har ek number ka Evidence Drawer me primary proof maujood hai (Invoice BILL-SUP-201 aur Khata records).`,
       audioSpeechEn: `MerchantMind uses a deterministic rule engine for all financial math with zero LLM hallucinations. All calculations are auditable.`,
@@ -331,42 +320,7 @@ export function generateVyaparAssistantResponse(
     query.includes('request') ||
     query.includes('delay')
   ) {
-    const highValCount = context.customers.filter(c => c.segment === 'HIGH_VALUE').length;
     return {
-      textEn: `Abhishek Mobile tracks ${context.customers.length} regular retail shoppers in the directory. You have ${highValCount} High-Value regulars driving top monthly footfall and repeat volume.`,
-      textHi: `Abhishek Mobile ki directory me kul ${context.customers.length} grahak registered hain. Inme se ${highValCount} High-Value regulars hain jo lagatar dukan par kharidari karte hain.`,
-      audioSpeechEn: `You have ${highValCount} High-Value customers in your directory driving repeat turnover.`,
-      audioSpeechHi: `Aapki directory me ${highValCount} High-Value grahak hain jo lagatar dukan aate hain.`,
-      metricsCard: {
-        title: 'Repeat Customer Retention',
-        value: `${highValCount} High Value`,
-        subtext: '40% of monthly retail turnover',
-        type: 'receivable',
-      },
-      suggestedActions: [
-        { label: '👥 Open Customer Directory', type: 'tab', payload: 'customers', variant: 'indigo' },
-        { label: '💳 View Paytm Transactions', type: 'tab', payload: 'transactions', variant: 'slate' },
-      ],
-    };
-  }
-
-  // 5. REBATE / PRICING / DISTRIBUTOR INCENTIVE
-  if (
-    query.includes('rebate') ||
-    query.includes('incentive') ||
-    query.includes('discount') ||
-    query.includes('chhoot') ||
-    query.includes('distributor rebate')
-  ) {
-    return {
-      textEn: `You have an eligible distributor volume rebate of ₹11,200 from wholesale distributor partners against quarterly Tier-2 purchases. Claiming this rebate credits direct liquidity into your account.`,
-      textHi: `Aapke pass quarterly Tier-2 target pura karne par ₹11,200 ka wholesale distributor rebate claim karne ka mauka hai. Isse turant direct cash liquidity milegi.`,
-      audioSpeechEn: `You have an eligible ₹11,200 distributor rebate to claim.`,
-      audioSpeechHi: `Aapke pass ₹11,200 ka distributor rebate claim karne ka mauka hai.`,
-      metricsCard: {
-        title: 'Eligible Volume Rebate',
-        value: '+₹11,200 Credit',
-        subtext: 'Quarterly Tier-2 volume incentive',
       textEn: `Supplier Negotiation Strategy (Lever C):\n• Split Formula: Pay 50% (₹22,500) on Day 12 to maintain goodwill and clear delivery holds.\n• Request 7-Day Grace Period for remainder: Pay the remaining ₹22,500 on Day 19 using next week's counter UPI velocity.\n• Pre-Drafted Message: MerchantMind has formulated a professional supplier extension letter in Action Center (Action act-003).`,
       textHi: `Sharma Telecom se Bill Split karne ka tarika (Lever C):\n1. Formula: 12 tareekh ko 50% payment (₹22,500) kar dijiye taaki supplier ka vishwas bana rahe.\n2. Baki ₹22,500 ke liye 7 din ka grace period mangiye jo agle hafte ki counter sales se aaram se clear ho jayega.\n3. Action Center me Sharma Telecom ko bhejane ke liye formal request letter pehle se taiyar hai.`,
       audioSpeechEn: `You can split the bill: pay 50% now (₹22,500) and request a 7-day grace period for the remainder.`,
@@ -405,8 +359,8 @@ export function generateVyaparAssistantResponse(
         type: 'inventory',
       },
       suggestedActions: [
-        { label: '💰 Claim ₹11,200 Distributor Rebate', type: 'action', actionId: 'act_04', variant: 'emerald' },
-        { label: '🏢 View Supplier Payables', type: 'tab', payload: 'payables', variant: 'indigo' },
+        { label: '⚡ Launch 48-Hr Stock Clearance Sale', type: 'action', actionId: 'act-002', variant: 'emerald' },
+        { label: '📦 Open Inventory Velocity Dashboard', type: 'tab', payload: 'inventory', variant: 'indigo' },
       ],
     };
   }
@@ -475,15 +429,6 @@ export function generateVyaparAssistantResponse(
     query.includes('tarakki')
   ) {
     return {
-      textEn: `Abhishek Mobile's business health score is ${healthScore}/100. Your current working capital runway is ${runway} days. While customer footfall and gross margin (24.5%) are healthy, your liquidity coverage ratio is 0.90x due to the impending supplier bill. Deferring the ₹20,000 supplier tranche restores your runway to a safe 22.5 days.`,
-      textHi: `Abhishek Mobile ka business health score ${healthScore}/100 hai aur dukan ka working capital runway ${runway} din ka hai. Grahak footfall aur munafa (24.5%) accha hai, par Sharma Telecom ke bill ki wajah se cash coverage 0.90x par hai. Supplier payment split karte hi runway safe 22.5 din ho jayega.`,
-      audioSpeechEn: `Your health score is ${healthScore}/100 with ${runway} days of runway. Splitting the supplier bill will restore your buffer.`,
-      audioSpeechHi: `Aapka health score ${healthScore}/100 hai aur ${runway} din ka runway hai. Supplier bill split karte hi cash balance safe ho jayega.`,
-      metricsCard: {
-        title: 'Financial Health Score',
-        value: `${healthScore}/100`,
-        subtext: `Runway: ${runway} Days • Margin: 24.5%`,
-        type: 'health',
       textEn: `3-Step Operational Growth Blueprint for Abhishek Mobile:\n1. Working Capital Velocity: Enforce a strict 14-day Khata credit limit on customers to prevent funds from locking up.\n2. Off-Peak Hour Stimulation: Launch flash promos between 11:00 AM and 1:00 PM when counter footfall is lowest.\n3. High-Margin Bundling: Bundle ₹40 tempered glass with mobile covers during peak evening hours (18:00–21:00) to raise average ticket size from ₹340 to ₹450+.`,
       textHi: `Abhishek Mobile ke liye 3-Step Growth Blueprint:\n1. Khata Rotation: Grahako ko 14 din se zyada ka Udhaar na dein taaki working capital hamesha ghumta rahe.\n2. Subah ke Slow Period me Offer: Subah 11 se 1 baje ke beech screen guard aur cable par deal dein taaki empty counter par footfall badhe.\n3. Shaam ke Peak Hours me Bundling: Shaam 6 se 9 baje tempered glass aur cover ka combo banakar bechein, jisse average bill ₹340 se badhkar ₹450+ ho jayega.`,
       audioSpeechEn: `Boost growth by enforcing 14-day Khata limits, offering morning flash deals, and bundling accessories during peak evening hours.`,

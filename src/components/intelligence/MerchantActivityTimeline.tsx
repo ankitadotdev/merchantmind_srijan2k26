@@ -35,10 +35,12 @@ export const MerchantActivityTimeline: React.FC<MerchantActivityTimelineProps> =
         return <Radio className="w-3.5 h-3.5 text-rose-600" />;
       case 'RISK':
         return <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />;
+      case 'KHATA':
+        return <BookOpen className="w-3.5 h-3.5 text-indigo-600" />;
+      case 'INVENTORY':
+        return <Package className="w-3.5 h-3.5 text-amber-600" />;
       case 'TRANSACTION':
         return <Volume2 className="w-3.5 h-3.5 text-sky-600" />;
-      case 'PAYMENT':
-        return <BookOpen className="w-3.5 h-3.5 text-indigo-600" />;
       default:
         return <Clock className="w-3.5 h-3.5 text-slate-500" />;
     }

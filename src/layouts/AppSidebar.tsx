@@ -5,7 +5,9 @@ import {
   Activity,
   TrendingUp,
   Receipt,
+  BookOpen,
   Building2,
+  Package,
   Users,
   Radio,
   Zap,
@@ -34,14 +36,18 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
   const {
     activeAppTab,
     setActiveAppTab,
+    receivables,
     payables,
+    inventory,
     signals,
     opportunities,
     actions,
     language,
   } = useMerchant();
 
+  const overdueKhataCount = receivables.filter((r) => r.status === 'OVERDUE').length;
   const urgentPayablesCount = payables.filter((p) => p.isCliff || p.priority === 'URGENT').length;
+  const deadStockCount = inventory.filter((i) => i.status === 'DEAD_STOCK').length;
   const criticalSignalsCount = signals.filter((s) => s.severity === 'CRITICAL').length;
   const pendingActionsCount = actions.filter((a) => a.status === 'AWAITING_APPROVAL' || a.status === 'DRAFT').length;
 
@@ -68,8 +74,15 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
       ],
     },
     {
-      groupTitle: language === 'hi' ? 'वर्किंग कैपिटल' : 'WORKING CAPITAL',
+      groupTitle: language === 'hi' ? 'वर्किंग कैपिटल (पूंजी)' : 'WORKING CAPITAL',
       items: [
+        {
+          id: 'khata',
+          label: language === 'hi' ? 'खाता और उधारी वसूली' : 'Khata / Receivables',
+          icon: BookOpen,
+          badge: overdueKhataCount > 0 ? `${overdueKhataCount} Overdue` : undefined,
+          badgeVariant: 'rose' as const,
+        },
         {
           id: 'payables',
           label: language === 'hi' ? 'सप्लायर बिल (Due)' : 'Supplier Payables',
@@ -78,10 +91,13 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
           badgeVariant: 'amber' as const,
         },
         {
-          id: 'customers',
-          label: language === 'hi' ? 'ग्राहक डायरेक्टरी' : 'Customers Directory',
-          icon: Users,
+          id: 'inventory',
+          label: language === 'hi' ? 'स्टॉक और फंसा हुआ माल' : 'Inventory Velocity',
+          icon: Package,
+          badge: deadStockCount > 0 ? `${deadStockCount} Dead` : undefined,
+          badgeVariant: 'slate' as const,
         },
+        { id: 'customers', label: language === 'hi' ? 'ग्राहक और क्रेडिट' : 'Customers & Credit', icon: Users },
       ],
     },
     {

@@ -2,7 +2,9 @@ import type {
   MerchantProfile,
   FinancialHealthMetrics,
   CashflowDatapoint,
+  ReceivableRecord,
   PayableRecord,
+  InventoryItem,
   CustomerProfile,
   BusinessSignal,
   Opportunity,
@@ -20,7 +22,9 @@ export interface IMerchantService {
   getMerchantProfile(): Promise<MerchantProfile>;
   getFinancialHealth(): Promise<FinancialHealthMetrics>;
   getCashflow(): Promise<CashflowDatapoint[]>;
+  getReceivables(): Promise<ReceivableRecord[]>;
   getPayables(): Promise<PayableRecord[]>;
+  getInventory(): Promise<InventoryItem[]>;
   getCustomers(): Promise<CustomerProfile[]>;
   getSignals(): Promise<BusinessSignal[]>;
   getOpportunities(): Promise<Opportunity[]>;
@@ -32,6 +36,7 @@ export interface IMerchantService {
   // Interactive Simulation Handlers
   approveAction(actionId: string): Promise<RecommendedAction>;
   executeActionSimulation(actionId: string): Promise<RecommendedAction>;
+  sendKhataReminder(receivableId: string): Promise<{ success: boolean; message: string; timestamp: string }>;
   triggerDataSync(connectionId: string): Promise<DataConnection>;
   runIntelligenceScan(): Promise<{ newSignals: number; newOpportunities: number }>;
   

@@ -3,7 +3,9 @@ import type {
   MerchantProfile,
   FinancialHealthMetrics,
   CashflowDatapoint,
+  ReceivableRecord,
   PayableRecord,
+  InventoryItem,
   CustomerProfile,
   BusinessSignal,
   Opportunity,
@@ -20,7 +22,9 @@ import {
   INITIAL_MERCHANT_PROFILE,
   INITIAL_FINANCIAL_HEALTH,
   CASHFLOW_PROJECTION_DATA,
+  INITIAL_RECEIVABLES,
   INITIAL_PAYABLES,
+  INITIAL_INVENTORY,
   INITIAL_CUSTOMERS,
   INITIAL_SIGNALS,
   INITIAL_OPPORTUNITIES,
@@ -38,7 +42,9 @@ export class MockMerchantService implements IMerchantService {
   private profile: MerchantProfile = { ...INITIAL_MERCHANT_PROFILE };
   private financialHealth: FinancialHealthMetrics = { ...INITIAL_FINANCIAL_HEALTH };
   private cashflow: CashflowDatapoint[] = [...CASHFLOW_PROJECTION_DATA];
+  private receivables: ReceivableRecord[] = [...INITIAL_RECEIVABLES];
   private payables: PayableRecord[] = [...INITIAL_PAYABLES];
+  private inventory: InventoryItem[] = [...INITIAL_INVENTORY];
   private customers: CustomerProfile[] = [...INITIAL_CUSTOMERS];
   private signals: BusinessSignal[] = [...INITIAL_SIGNALS];
   private opportunities: Opportunity[] = [...INITIAL_OPPORTUNITIES];
@@ -70,9 +76,19 @@ export class MockMerchantService implements IMerchantService {
     return [...this.cashflow];
   }
 
+  async getReceivables(): Promise<ReceivableRecord[]> {
+    await this.delay();
+    return [...this.receivables];
+  }
+
   async getPayables(): Promise<PayableRecord[]> {
     await this.delay();
     return [...this.payables];
+  }
+
+  async getInventory(): Promise<InventoryItem[]> {
+    await this.delay();
+    return [...this.inventory];
   }
 
   async getCustomers(): Promise<CustomerProfile[]> {
@@ -148,39 +164,39 @@ export class MockMerchantService implements IMerchantService {
       simulatedLogs: [
         ...(target.simulatedLogs || []),
         { step: 'Executed simulated automated dispatch payload', timestamp: now, status: 'SUCCESS' },
-        { step: 'Simulated distributor acknowledgement & settlement event', timestamp: now, status: 'SUCCESS' },
+        { step: 'Simulated customer acknowledgement & settlement event', timestamp: now, status: 'SUCCESS' },
       ],
     };
     this.actions[index] = completedAction;
 
     // Apply deterministic business outcome to financial state
-    if (target.id === 'act_03') {
-      // 7-day payment split deferral with Sharma Telecom: defers ₹20,000, turning -₹4,393 gap into +₹15,607 safe surplus
+    if (target.id === 'act_01') {
+      // Overdue Khata recovery: +₹3,700 cash, -₹3,700 overdue receivables
       this.financialHealth = {
         ...this.financialHealth,
-        urgentPayablesNext7Days: Math.max(0, this.financialHealth.urgentPayablesNext7Days - 20000),
-        netImmediateLiquidityGap: 15607,
-        healthScore: 78,
+        availableCash: this.financialHealth.availableCash + 3700,
+        overdueReceivables: Math.max(0, this.financialHealth.overdueReceivables - 3700),
+        netImmediateLiquidityGap: this.financialHealth.availableCash + 3700 - this.financialHealth.urgentPayablesNext7Days,
+        healthScore: 72,
+        healthStatus: 'CAUTION',
+      };
+      // Mark Amit and Neha collected
+      this.receivables = this.receivables.map((r) =>
+        r.id === 'rec_01' || r.id === 'rec_02' ? { ...r, status: 'COLLECTED', outstandingAmount: 0 } : r
+      );
+    } else if (target.id === 'act_02') {
+      // Dead stock clearance: +₹7,800 cash, -₹10,660 locked capital
+      this.financialHealth = {
+        ...this.financialHealth,
+        availableCash: this.financialHealth.availableCash + 7800,
+        deadStockCapitalLocked: 0,
+        netImmediateLiquidityGap: this.financialHealth.availableCash + 7800 - this.financialHealth.urgentPayablesNext7Days,
+        healthScore: 84,
         healthStatus: 'STABLE',
       };
-      this.payables = this.payables.map((p) =>
-        p.id === 'pay_01'
-          ? {
-              ...p,
-              amount: 25000,
-              notes: 'Restructured: ₹25,000 payable Oct 9, deferred tranche ₹20,000 due Oct 16.',
-            }
-          : p
+      this.inventory = this.inventory.map((inv) =>
+        inv.status === 'DEAD_STOCK' ? { ...inv, currentStock: 0, totalLockedCapital: 0, status: 'HEALTHY' } : inv
       );
-    } else if (target.id === 'act_04') {
-      // Distributor volume rebate claim: +₹11,200 cash inflow credited
-      this.financialHealth = {
-        ...this.financialHealth,
-        availableCash: this.financialHealth.availableCash + 11200,
-        netImmediateLiquidityGap: this.financialHealth.netImmediateLiquidityGap + 11200,
-        healthScore: 86,
-        healthStatus: 'EXCELLENT',
-      };
     }
 
     this.auditLogs.unshift({
@@ -194,6 +210,32 @@ export class MockMerchantService implements IMerchantService {
     });
 
     return { ...completedAction };
+  }
+
+  async sendKhataReminder(receivableId: string): Promise<{ success: boolean; message: string; timestamp: string }> {
+    await this.delay(200);
+    const rec = this.receivables.find((r) => r.id === receivableId);
+    if (!rec) throw new Error('Receivable not found');
+
+    const now = new Date().toISOString();
+    rec.remindersCount += 1;
+    rec.lastReminderSentAt = now;
+
+    this.auditLogs.unshift({
+      id: `aud_${Date.now()}`,
+      timestamp: now,
+      category: 'ACTION_EXECUTED',
+      actor: 'Khata Intelligence Bot',
+      actionTitle: `Payment Reminder Sent to ${rec.customerName}`,
+      entityId: rec.id,
+      summary: `WhatsApp reminder dispatched with instant Paytm/UPI deep-link for ₹${rec.outstandingAmount.toLocaleString('en-IN')}.`,
+    });
+
+    return {
+      success: true,
+      message: `Simulated WhatsApp reminder dispatched to ${rec.customerName} (${rec.customerPhone})`,
+      timestamp: now,
+    };
   }
 
   async triggerDataSync(connectionId: string): Promise<DataConnection> {
@@ -248,7 +290,7 @@ export class MockMerchantService implements IMerchantService {
       actor: 'Intelligence Radar',
       actionTitle: 'Merchant Diagnostic Scan Finished',
       entityId: 'radar_01',
-      summary: 'Ran deterministic validation heuristics across cashflow velocity, settlements, and supplier schedules.',
+      summary: 'Ran 14 deterministic validation heuristics across cashflow, ledger, and stock velocity.',
     });
 
     return { newSignals: this.signals.length, newOpportunities: this.opportunities.length };
@@ -319,7 +361,9 @@ export class MockMerchantService implements IMerchantService {
     this.profile = { ...INITIAL_MERCHANT_PROFILE };
     this.financialHealth = { ...INITIAL_FINANCIAL_HEALTH };
     this.cashflow = [...CASHFLOW_PROJECTION_DATA];
+    this.receivables = [...INITIAL_RECEIVABLES];
     this.payables = [...INITIAL_PAYABLES];
+    this.inventory = [...INITIAL_INVENTORY];
     this.customers = [...INITIAL_CUSTOMERS];
     this.signals = [...INITIAL_SIGNALS];
     this.opportunities = [...INITIAL_OPPORTUNITIES];
