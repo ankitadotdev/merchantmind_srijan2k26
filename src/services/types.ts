@@ -45,3 +45,4 @@ export interface IMerchantService {
   switchScenario(scenario: BusinessScenarioId): Promise<void>;
   resetDemo(): Promise<void>;
 }
+

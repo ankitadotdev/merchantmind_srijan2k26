@@ -334,3 +334,4 @@ export class MockMerchantService implements IMerchantService {
 }
 
 export const merchantServiceInstance = new MockMerchantService();
+
