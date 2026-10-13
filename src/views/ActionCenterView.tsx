@@ -217,7 +217,7 @@ export const ActionCenterView: React.FC = () => {
                 </div>
                 <div className="p-3 bg-indigo-50 rounded-xl border border-indigo-200">
                   <span className="text-[10px] text-indigo-800 font-bold uppercase block">Projected Balance Delta</span>
-                  <span className="text-base font-bold font-mono text-indigo-700">-₹4,393 &rarr; +₹7,107</span>
+                  <span className="text-base font-bold font-mono text-indigo-700">-₹4,393 &rarr; +₹15,607</span>
                 </div>
               </div>
 
@@ -231,7 +231,7 @@ export const ActionCenterView: React.FC = () => {
                 <div className="space-y-0.5">
                   <strong className="block text-[11px] font-bold uppercase">Simulated Execution Guardrail</strong>
                   <p className="text-[11px] text-amber-800 leading-relaxed">
-                    This execution operates inside MerchantMind’s deterministic demo environment. No real funds will move and no real external WhatsApp messages will be dispatched.
+                    This execution operates inside MerchantMind’s deterministic demo environment. No real funds will move and no external emails or notices will be dispatched.
                   </p>
                 </div>
               </div>
@@ -310,13 +310,13 @@ export const ActionCenterView: React.FC = () => {
           <span className="text-[10px] text-rose-800 font-sans block">Coverage Deficit</span>
         </div>
         <div>
-          <span className="text-[10px] text-emerald-800 block uppercase font-bold">4. Recoverable Potential</span>
-          <span className="text-base font-bold font-mono text-emerald-700 block mt-0.5">+{formatINR(11500)}</span>
-          <span className="text-[10px] text-emerald-800 font-sans block">₹3.7K Khata + ₹7.8K Stock</span>
+          <span className="text-[10px] text-emerald-800 block uppercase font-bold">4. Restructuring Deferral</span>
+          <span className="text-base font-bold font-mono text-emerald-700 block mt-0.5">+{formatINR(20000)}</span>
+          <span className="text-[10px] text-emerald-800 font-sans block">₹20K Deferred to Oct 16</span>
         </div>
         <div className="p-2.5 bg-slate-900 text-white rounded-xl col-span-2 sm:col-span-1">
           <span className="text-[10px] text-emerald-400 block uppercase font-bold">5. Projected Position</span>
-          <span className="text-base font-bold font-mono text-emerald-400 block mt-0.5">+{formatINR(7107)}</span>
+          <span className="text-base font-bold font-mono text-emerald-400 block mt-0.5">+{formatINR(15607)}</span>
           <span className="text-[10px] text-slate-300 font-sans block">Safe Working Cushion</span>
         </div>
       </div>
@@ -351,16 +351,16 @@ export const ActionCenterView: React.FC = () => {
           const isAwaitingPayment = currentStage === 'AWAITING_PAYMENT';
           const isMeasured = currentStage === 'MEASURED' || act.status === 'COMPLETED';
 
-          const targetCustomer = act.id === 'act_01' ? 'Amit Verma (₹2,200, 38d overdue)' : act.id === 'act_02' ? 'In-Store Shoppers (Dead Stock)' : 'Sharma Telecom Distributor';
-          const defaultMsg = act.id === 'act_01'
-            ? 'Namaste Amit ji, your overdue Khata balance of ₹2,200 at Abhishek Mobile is pending for 38 days. Please clear via this instant 1-click Paytm/UPI link: https://paytm.me/am_amit2200'
-            : 'Abhishek Mobile Flash Sale: Get heavy discounts on premium tempered glass and shockproof covers this weekend only!';
+          const targetCustomer = act.id === 'act_03' ? 'Sharma Telecom Distributor' : act.id === 'act_04' ? 'Sharma Telecom (Incentive Portal)' : 'Distributor Partner';
+          const defaultMsg = act.id === 'act_03'
+            ? 'Rescheduling Request: We propose settling BILL-SUP-201 (₹45,000) in 2 tranches: ₹25,000 upfront on Oct 9 and balance ₹20,000 in 7 days on Oct 16.'
+            : 'Distributor Volume Incentive: Claim submission for eligible ₹11,200 quarterly hardware rebate.';
           const messageText = customMessages[act.id] || defaultMsg;
 
           return (
             <Card
               key={act.id}
-              id={act.id === 'act_01' ? 'tour-action-card' : undefined}
+              id={act.id === 'act_03' ? 'tour-action-card' : undefined}
               className={`p-5 shadow-xs transition-all ${
                 isMeasured
                   ? 'border-emerald-300 bg-emerald-50/20'
@@ -394,17 +394,17 @@ export const ActionCenterView: React.FC = () => {
                     )}
                     {isSent && (
                       <Badge variant="cyan" size="sm">
-                        Sent via WhatsApp Cloud
+                        Proposal Dispatched
                       </Badge>
                     )}
                     {isAwaitingPayment && (
                       <Badge variant="amber" size="sm">
-                        Awaiting Customer Payment
+                        Awaiting Partner Confirmation
                       </Badge>
                     )}
                     {isMeasured && (
                       <Badge variant="emerald" size="sm">
-                        Payment Received • Measured
+                        Restructuring Verified • Measured
                       </Badge>
                     )}
 
@@ -435,7 +435,7 @@ export const ActionCenterView: React.FC = () => {
                       <div>
                         <span className="text-[10px] text-slate-400 uppercase font-semibold block">Suggested Action</span>
                         <strong className="text-slate-800 text-xs">
-                          {act.id === 'act_01' ? 'Send WhatsApp UPI Reminder' : 'In-Store Clearance Markdown'}
+                          {act.actionType === 'RESCHEDULE_SUPPLIER' ? '7-Day Tranche Split Proposal' : 'Volume Rebate Claim Submission'}
                         </strong>
                       </div>
                       <div>
@@ -446,11 +446,11 @@ export const ActionCenterView: React.FC = () => {
                       </div>
                     </div>
 
-                    {act.id === 'act_01' && (
+                    {(act.id === 'act_03' || act.id === 'act_04') && (
                       <div className="pt-2 border-t border-slate-200">
                         <span className="text-[10px] text-slate-500 font-semibold block mb-1 flex items-center gap-1">
-                          <MessageSquare className="w-3 h-3 text-emerald-600" />
-                          Prepared WhatsApp Dispatch Payload:
+                          <MessageSquare className="w-3 h-3 text-indigo-600" />
+                          Prepared Dispatch Proposal Payload:
                         </span>
                         <p className="text-[11px] text-slate-700 bg-white p-2.5 rounded-lg border border-slate-200/80 italic font-mono leading-relaxed">
                           "{messageText}"
@@ -625,20 +625,20 @@ export const ActionCenterView: React.FC = () => {
           </div>
 
           <div className="p-3 bg-white/80 rounded-xl border border-emerald-200">
-            <span className="text-emerald-600 font-sans block text-[10px] uppercase font-semibold">3. Actions Liberated</span>
-            <span className="text-sm font-bold text-emerald-700">+{formatINR(11500)}</span>
-            <span className="text-[10px] text-emerald-600 font-sans block mt-0.5">Khata ₹3.7K + Stock ₹7.8K</span>
+            <span className="text-emerald-600 font-sans block text-[10px] uppercase font-semibold">3. Actions Deferral</span>
+            <span className="text-sm font-bold text-emerald-700">+{formatINR(20000)}</span>
+            <span className="text-[10px] text-emerald-600 font-sans block mt-0.5">₹20K Deferred by 7 Days</span>
           </div>
 
           <div className="p-3 bg-emerald-900 text-white rounded-xl border border-emerald-800 shadow-xs">
             <span className="text-emerald-300 font-sans block text-[10px] uppercase font-semibold">4. Resulting Surplus</span>
-            <span className="text-base font-bold text-emerald-300">+{formatINR(7107)}</span>
+            <span className="text-base font-bold text-emerald-300">+{formatINR(15607)}</span>
             <span className="text-[10px] text-emerald-200 font-sans block mt-0.5">Safe Working Buffer Restored!</span>
           </div>
         </div>
 
         <p className="text-xs text-slate-600 leading-relaxed">
-          <strong>Outcome Summary:</strong> The impending <strong>-₹4,393</strong> liquidity crisis was averted without taking emergency short-term debt. Wholesale invoice <strong>BILL-SUP-201</strong> is scheduled for full settlement, and working capital surplus increased to <strong>+₹7,107</strong>.
+          <strong>Outcome Summary:</strong> The impending <strong>-₹4,393</strong> liquidity crisis was averted without taking emergency short-term debt. Wholesale invoice <strong>BILL-SUP-201</strong> was restructured into 2 tranches, and working capital surplus increased to <strong>+₹15,607</strong>.
         </p>
       </div>
     </div>

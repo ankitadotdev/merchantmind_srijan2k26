@@ -8,17 +8,14 @@ export type BusinessScenarioId =
   | 'abhishek-mobile-crisis'
   | 'healthy-business'
   | 'cash-pressure'
-  | 'receivables-risk'
-  | 'inventory-risk'
   | 'supplier-cliff'
   | 'liquidity-pressure'
-  | 'healthy-growth'
-  | 'inventory-lockup';
+  | 'healthy-growth';
 
 export interface MerchantActivityEvent {
   id: string;
   time: string;
-  category: 'SYNC' | 'SIGNAL' | 'RISK' | 'KHATA' | 'INVENTORY' | 'TRANSACTION';
+  category: 'SYNC' | 'SIGNAL' | 'RISK' | 'TRANSACTION' | 'PAYMENT';
   title: string;
   description: string;
   status: 'SUCCESS' | 'WARNING' | 'ALERT' | 'INFO';
@@ -59,12 +56,8 @@ export interface FinancialHealthMetrics {
   safeCashBuffer: number;
   cashRunwayDays: number;
   liquidityCoverageRatio: number;
-  totalReceivables: number;
-  overdueReceivables: number;
   totalPayables: number;
   urgentPayablesNext7Days: number;
-  deadStockCapitalLocked: number;
-  totalInventoryValuation: number;
   netImmediateLiquidityGap: number; // negative indicates deficit
   healthScore: number; // 0 to 100
   healthStatus: 'CRITICAL_RISK' | 'CAUTION' | 'STABLE' | 'EXCELLENT';
@@ -82,27 +75,6 @@ export interface CashflowDatapoint {
   isForecast: boolean;
   annotation?: string;
   isCliff?: boolean;
-}
-
-export type AgeingBucket = '0-7' | '8-30' | '31-60' | '61-90' | '90+';
-
-export interface ReceivableRecord {
-  id: string;
-  customerId: string;
-  customerName: string;
-  customerPhone: string;
-  invoiceNumber: string;
-  invoiceDate: string;
-  dueDate: string;
-  originalAmount: number;
-  outstandingAmount: number;
-  daysOverdue: number;
-  ageingBucket: AgeingBucket;
-  riskCategory: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-  status: 'CURRENT' | 'DUE_SOON' | 'OVERDUE' | 'COLLECTED';
-  lastReminderSentAt?: string;
-  remindersCount: number;
-  notes?: string;
 }
 
 export interface PayableRecord {
@@ -126,24 +98,6 @@ export interface PayableRecord {
   earlyPaymentDiscountPercent?: number;
 }
 
-export interface InventoryItem {
-  id: string;
-  sku: string;
-  title: string;
-  category: string;
-  currentStock: number;
-  reorderLevel: number;
-  unitCostPrice: number;
-  unitSellingPrice: number;
-  totalLockedCapital: number;
-  daysInStock: number;
-  salesVelocityLast30Days: number; // units sold
-  status: 'HEALTHY' | 'FAST_MOVING' | 'SLOW_MOVING' | 'DEAD_STOCK' | 'OUT_OF_STOCK';
-  daysOfInventoryRemaining: number;
-  suggestedAction?: string;
-  potentialCapitalRecovery?: number;
-}
-
 export interface CustomerProfile {
   id: string;
   name: string;
@@ -152,9 +106,6 @@ export interface CustomerProfile {
   totalLifetimeSpend: number;
   totalOrders: number;
   lastPurchaseDate: string;
-  currentOutstandingKhata: number;
-  avgPaymentLatencyDays: number;
-  riskScore: number; // 0-100 (higher = riskier credit)
 }
 
 export type SignalSeverity = 'CRITICAL' | 'WARNING' | 'OPPORTUNITY' | 'INFO';
@@ -165,7 +116,7 @@ export interface BusinessSignal {
   title: string;
   description: string;
   severity: SignalSeverity;
-  category: 'LIQUIDITY' | 'RECEIVABLES' | 'INVENTORY' | 'SUPPLIER' | 'REVENUE';
+  category: 'LIQUIDITY' | 'SUPPLIER' | 'REVENUE';
   detectedAt: string;
   metricImpact: string;
   confidenceScore: number;
@@ -175,11 +126,9 @@ export interface BusinessSignal {
 
 export type OpportunityCategory =
   | 'CASH_PRESSURE'
-  | 'OVERDUE_RECEIVABLES'
-  | 'DEAD_STOCK'
-  | 'INVENTORY_VELOCITY'
   | 'SUPPLIER_PAYMENT'
   | 'SUPPLIER_DISCOUNT'
+  | 'PRICING_OPTIMIZATION'
   | 'CUSTOMER_CHURN'
   | 'MARGIN_LEAKAGE';
 
@@ -211,7 +160,7 @@ export interface Opportunity {
 }
 
 export interface EvidenceSourceRecord {
-  type: 'SUPPLIER_BILL' | 'CUSTOMER_INVOICE' | 'INVENTORY_SKU' | 'BANK_STATEMENT' | 'CASH_METRIC';
+  type: 'SUPPLIER_BILL' | 'BANK_STATEMENT' | 'CASH_METRIC' | 'PAYMENT_VELOCITY';
   referenceId: string;
   entityName: string;
   amount: number;
@@ -255,7 +204,7 @@ export interface RecommendedAction {
   opportunityId: string;
   title: string;
   description: string;
-  actionType: 'SEND_REMINDER' | 'DISCOUNT_CLEARANCE' | 'RESCHEDULE_SUPPLIER' | 'REDUCE_EXPENSE' | 'EXPEDITE_INVOICE';
+  actionType: 'SEND_REMINDER' | 'RESCHEDULE_SUPPLIER' | 'REDUCE_EXPENSE' | 'EXPEDITE_INVOICE' | 'CLAIM_REBATE';
   priorityOrder: number; // 1 = highest recommendation
   expectedImpactAmount: number;
   impactDescription: string;
@@ -287,7 +236,7 @@ export type ConnectionStatus =
 export interface DataConnection {
   id: string;
   name: string;
-  category: 'PAYMENTS' | 'BANKING' | 'ACCOUNTING' | 'POS' | 'INVENTORY' | 'MANUAL';
+  category: 'PAYMENTS' | 'BANKING' | 'ACCOUNTING' | 'POS' | 'MANUAL';
   provider: string;
   description: string;
   status: ConnectionStatus;
@@ -327,7 +276,7 @@ export interface TransactionRecord {
   id: string;
   date: string;
   time: string;
-  type: 'INFLOW_SALE' | 'INFLOW_KHATA' | 'OUTFLOW_SUPPLIER' | 'OUTFLOW_EXPENSE';
+  type: 'INFLOW_SALE' | 'OUTFLOW_SUPPLIER' | 'OUTFLOW_EXPENSE';
   channel: 'PAYTM_QR' | 'PAYTM_EDC' | 'UPI' | 'CASH' | 'NETBANKING';
   counterparty: string;
   amount: number;

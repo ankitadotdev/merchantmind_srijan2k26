@@ -76,8 +76,8 @@ export const SignalActionFlowCard: React.FC<SignalActionFlowCardProps> = ({
     {
       num: 4,
       label: 'RECOMMENDATION',
-      title: 'Dual Recovery Package',
-      desc: 'Recover ₹3,700 overdue Khata + liquidate ₹7,800 dead stock (+₹11,500 total)',
+      title: 'Supplier Tranche Restructuring',
+      desc: 'Pay ₹25,000 on Oct 9 and defer ₹20,000 by 7 days to Oct 16 (+₹20,000 deferral buffer)',
       icon: Sparkles,
       badge: 'Quantified Plan',
       color: 'indigo',
@@ -94,8 +94,8 @@ export const SignalActionFlowCard: React.FC<SignalActionFlowCardProps> = ({
     {
       num: 6,
       label: 'ACTION',
-      title: 'Multi-Channel Execution',
-      desc: 'WhatsApp UPI payment reminders dispatched + in-store clearance discount standee',
+      title: 'Tranche Split Proposal Dispatch',
+      desc: 'Automated settlement proposal dispatched to Sharma Telecom distributor accounts',
       icon: Send,
       badge: 'Automated Dispatch',
       color: 'indigo',
@@ -103,8 +103,8 @@ export const SignalActionFlowCard: React.FC<SignalActionFlowCardProps> = ({
     {
       num: 7,
       label: 'MEASURED RESULT',
-      title: '+₹11,500 Recovered',
-      desc: 'Cash position transformed from -₹4,393 deficit to +₹7,107 safe working cushion',
+      title: '+₹15,607 Safe Cushion',
+      desc: 'Cash position transformed from -₹4,393 deficit to +₹15,607 safe operating buffer',
       icon: TrendingUp,
       badge: 'Closed-Loop Verification',
       color: 'emerald',
