@@ -1,23 +1,15 @@
 import React, { useState } from 'react';
 import {
   CheckSquare,
-  Clock,
   Play,
   CheckCircle2,
   AlertTriangle,
   RotateCcw,
-  Sparkles,
-  ShieldCheck,
-  ArrowRight,
-  TrendingUp,
   MessageSquare,
-  Send,
   Edit3,
   Trash2,
   X,
-  Phone,
-  DollarSign,
-  ChevronRight,
+  ShieldCheck,
 } from 'lucide-react';
 import { useMerchant } from '../context/MerchantContext';
 import { Card } from '../components/ui/Card';
@@ -44,16 +36,6 @@ export const ActionCenterView: React.FC = () => {
   const [dismissedIds, setDismissedIds] = useState<string[]>([]);
   const [editModal, setEditModal] = useState<EditActionModalState | null>(null);
   const [customMessages, setCustomMessages] = useState<Record<string, string>>({});
-
-  const handleApprove = async (id: string) => {
-    setLoadingId(id);
-    try {
-      await approveAction(id);
-      setExecutingStages((prev) => ({ ...prev, [id]: 'APPROVED' }));
-    } finally {
-      setLoadingId(null);
-    }
-  };
 
   const handleConfirmAndExecute = async (act: RecommendedAction) => {
     setConfirmModal(null);

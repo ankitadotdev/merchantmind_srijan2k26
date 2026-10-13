@@ -59,7 +59,7 @@ export const Drawer: React.FC<DrawerProps> = ({
         onClick={noBlur ? undefined : onClose}
       />
 
-      <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
+      <div className="fixed inset-y-0 right-0 flex max-w-full pl-4 sm:pl-10">
         <div
           className={cn(
             'w-screen bg-white shadow-2xl border-l border-slate-200 flex flex-col transform transition-transform duration-300 ease-in-out pointer-events-auto',

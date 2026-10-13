@@ -63,44 +63,38 @@ export const VyaparAssistantView: React.FC = () => {
     setIsBriefingOpen,
   } = useMerchant();
 
+  const proprietorName = profile?.proprietor ? profile.proprietor.split(' ')[0] : 'Abhishek';
+
   const [inputQuery, setInputQuery] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState<string | null>(null);
-  const [messages, setMessages] = useState<ChatMessageItem[]>([]);
+  const [messages, setMessages] = useState<ChatMessageItem[]>(() => [
+    {
+      id: 'init-view-msg',
+      sender: 'assistant',
+      timestamp: 'Just now',
+      text:
+        language === 'hi'
+          ? `Ram Ram ${proprietorName} bhai! Main hoon aapka Paytm Vyapar AI Sahayak. Dukan ke SBI khate me ₹40,607 cash hai aur aaj ₹8,450 Paytm QR se aa chuka hai. Lekin 5 din baad Sharma Telecom ka ₹45,000 ka bill due hai (-₹4,393 deficit). Kya Sharma Telecom ke bill ko do kiston (₹25,000 + ₹20,000) me baantkar cash cushion banayein?`
+          : `Hello ${proprietorName}! I am your Paytm Vyapar AI Business Partner. Abhishek Mobile holds ₹40,607 in cash, with ₹8,450 settled today via Paytm QR. However, Sharma Telecom's ₹45,000 wholesale invoice is due in 5 days (-₹4,393 cash gap). Would you like to split the supplier bill into 2 payments (₹25K + ₹20K) to secure a safe +₹15,607 working cushion?`,
+      metricsCard: {
+        title: '5-Day Cash Runway & Cliff Alert',
+        value: '-₹4,393 Deficit Risk',
+        subtext: 'Cash ₹40,607 vs Bill ₹45,000 (Sharma Telecom)',
+        type: 'payable',
+      },
+      suggestedActions: [
+        { label: '🤝 Propose 7-Day Split Payment', type: 'action', actionId: 'act_03', variant: 'emerald' },
+        { label: '📊 14-Day Cashflow Projection', type: 'tab', payload: 'cashflow', variant: 'indigo' },
+        { label: '🔍 Sharma Telecom Bill Evidence', type: 'evidence', payload: 'evi_01', variant: 'amber' },
+      ],
+      audioSpeech:
+        language === 'hi'
+          ? `Ram Ram ${proprietorName} bhai. Khate me ₹40,607 cash hai. 5 din baad Sharma Telecom ko ₹45,000 dene hain. Chaliye bill ko do kiston me baantte hain.`
+          : `Hello ${proprietorName}. You have ₹40,607 cash and a ₹45,000 bill in 5 days. Let's restructure the supplier payment today.`,
+    },
+  ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const proprietorName = profile?.proprietor ? profile.proprietor.split(' ')[0] : 'Abhishek';
-
-  useEffect(() => {
-    if (messages.length === 0) {
-      setMessages([
-        {
-          id: 'init-view-msg',
-          sender: 'assistant',
-          timestamp: 'Just now',
-          text:
-            language === 'hi'
-              ? `Ram Ram ${proprietorName} bhai! Main hoon aapka Paytm Vyapar AI Sahayak. Dukan ke SBI khate me ₹40,607 cash hai aur aaj ₹8,450 Paytm QR se aa chuka hai. Lekin 5 din baad Sharma Telecom ka ₹45,000 ka bill due hai (-₹4,393 deficit). Kya Sharma Telecom ke bill ko do kiston (₹25,000 + ₹20,000) me baantkar cash cushion banayein?`
-              : `Hello ${proprietorName}! I am your Paytm Vyapar AI Business Partner. Abhishek Mobile holds ₹40,607 in cash, with ₹8,450 settled today via Paytm QR. However, Sharma Telecom's ₹45,000 wholesale invoice is due in 5 days (-₹4,393 cash gap). Would you like to split the supplier bill into 2 payments (₹25K + ₹20K) to secure a safe +₹15,607 working cushion?`,
-          metricsCard: {
-            title: '5-Day Cash Runway & Cliff Alert',
-            value: '-₹4,393 Deficit Risk',
-            subtext: 'Cash ₹40,607 vs Bill ₹45,000 (Sharma Telecom)',
-            type: 'payable',
-          },
-          suggestedActions: [
-            { label: '🤝 Propose 7-Day Split Payment', type: 'action', actionId: 'act_03', variant: 'emerald' },
-            { label: '📊 14-Day Cashflow Projection', type: 'tab', payload: 'cashflow', variant: 'indigo' },
-            { label: '🔍 Sharma Telecom Bill Evidence', type: 'evidence', payload: 'evi_01', variant: 'amber' },
-          ],
-          audioSpeech:
-            language === 'hi'
-              ? `Ram Ram ${proprietorName} bhai. Khate me ₹40,607 cash hai. 5 din baad Sharma Telecom ko ₹45,000 dene hain. Chaliye bill ko do kiston me baantte hain.`
-              : `Hello ${proprietorName}. You have ₹40,607 cash and a ₹45,000 bill in 5 days. Let's restructure the supplier payment today.`,
-        },
-      ]);
-    }
-  }, [language, proprietorName, messages.length]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
   X,
   Play,
@@ -28,8 +28,8 @@ export const WhatsAppBriefingModal: React.FC = () => {
 
   const audioNoteText =
     language === 'hi'
-      ? `Ram Ram ${proprietorName} bhai! Aaj subah 8 baje ka dukan briefing: Kal dukan par 42 Paytm transactions hue, ₹8,450 SBI khate me credit ho chuka hai. Dhyan rahe, 5 din me Sharma Telecom ko ₹45,000 ka wholesale payment karna hai, jabki khate me theek ₹40,607 cash hai (-₹4,393 ka gap). Aaj sabse pehle Amit Verma aur Neha Sharma ko WhatsApp payment link bhejiye taaki ₹3,700 counter par turant aa jaye.`
-      : `Good morning ${proprietorName}! Morning 8:00 AM briefing for Abhishek Mobile: Yesterday registered 42 Paytm QR transactions, and ₹8,450 settled into your SBI current account. Important note: Sharma Telecom's ₹45,000 invoice is due in 5 days with a -₹4,393 gap against your ₹40,607 cash. First priority today: collect ₹3,700 overdue Khata credit from Amit Verma and Neha Sharma.`;
+      ? `Ram Ram ${proprietorName} bhai! Aaj subah 8 baje ka dukan briefing: Kal dukan par 42 Paytm transactions hue, ₹8,450 SBI khate me credit ho chuka hai. Dhyan rahe, 5 din me Sharma Telecom ko ₹45,000 ka wholesale payment karna hai, jabki khate me theek ₹40,607 cash hai (-₹4,393 ka gap). Hal ye hai ki Sharma Telecom ke bill ko 2 kiston (₹25,000 upfront + ₹20,000 7-din deferral) me split karke dukan ka cash cushion +₹15,607 banayein.`
+      : `Good morning ${proprietorName}! Morning 8:00 AM briefing for Abhishek Mobile: Yesterday registered 42 Paytm QR transactions, and ₹8,450 settled into your SBI current account. Important note: Sharma Telecom's ₹45,000 invoice is due in 5 days with a -₹4,393 gap against your ₹40,607 cash. First priority today: split Sharma Telecom's payment into 2 tranches (₹25K upfront + ₹20K deferred by 7 days) to preserve a safe +₹15,607 operating cushion.`;
 
   const handleToggleAudio = () => {
     if (isPlayingAudio) {
@@ -158,17 +158,17 @@ export const WhatsAppBriefingModal: React.FC = () => {
 
               <div className="p-2.5 rounded-xl bg-emerald-50/80 border border-emerald-200 space-y-1.5">
                 <div className="flex justify-between items-center text-[11px] font-semibold text-emerald-900">
-                  <span>2. Overdue Customer Udhaar Recovery</span>
-                  <span className="text-emerald-700 font-mono font-bold">+₹3,700 Unlocked</span>
+                  <span>2. Payment Restructuring Proposal</span>
+                  <span className="text-emerald-700 font-mono font-bold">+₹20,000 Deferral Cushion</span>
                 </div>
                 <p className="text-[11px] text-emerald-800/90 leading-tight">
-                  Amit Verma (₹2,200) & Neha Sharma (₹1,500) owe money past 30 days. Send WhatsApp paylink with 2% discount.
+                  Propose 2-tranche split to Sharma Telecom: pay ₹25,000 upfront on Oct 9 and defer ₹20,000 by 7 days to Oct 16.
                 </p>
 
                 {hasDispatched ? (
                   <div className="p-2 rounded-lg bg-emerald-100 text-emerald-800 text-[11px] font-semibold flex items-center gap-1.5">
                     <CheckCheck className="w-4 h-4 text-emerald-600" />
-                    <span>WhatsApp paylinks dispatched to customers!</span>
+                    <span>Payment restructuring proposal dispatched to Sharma Telecom!</span>
                   </div>
                 ) : (
                   <Button
@@ -178,7 +178,7 @@ export const WhatsAppBriefingModal: React.FC = () => {
                     className="w-full text-xs font-semibold py-1.5 gap-1.5 shadow-sm"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    1-Click Dispatch WhatsApp Paylinks
+                    1-Click Dispatch Restructuring Proposal
                   </Button>
                 )}
               </div>

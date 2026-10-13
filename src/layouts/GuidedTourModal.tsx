@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
   Sparkles,
   ChevronRight,
@@ -54,7 +54,7 @@ export const GuidedTourModal: React.FC = () => {
   const [coords, setCoords] = useState<PopoverCoords | null>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
 
-  const steps: TourStep[] = [
+  const steps: TourStep[] = useMemo(() => [
     {
       title: '1. The Problem: Working Capital Blindspots',
       badge: 'MSME Reality',
@@ -395,7 +395,7 @@ export const GuidedTourModal: React.FC = () => {
         setActiveAppTab('command-center');
       },
     },
-  ];
+  ], [closeTour, closeEvidenceDrawer, setActiveWorld, setActiveAppTab, openEvidenceDrawer]);
 
   const current = steps[currentStep];
 
