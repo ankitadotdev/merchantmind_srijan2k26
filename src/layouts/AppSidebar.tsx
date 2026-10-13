@@ -68,10 +68,6 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
       ],
     },
     {
-      groupTitle: language === 'hi' ? 'वर्किंग कैपिटल (पूंजी)' : 'WORKING CAPITAL',
-      items: [
-        {
-    {
       groupTitle: language === 'hi' ? 'वर्किंग कैपिटल' : 'WORKING CAPITAL',
       items: [
         {
