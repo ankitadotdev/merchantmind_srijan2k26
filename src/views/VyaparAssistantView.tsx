@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   MessageSquare,
   Mic,
@@ -54,9 +54,7 @@ export const VyaparAssistantView: React.FC = () => {
     profile,
     financialHealth,
     cashflow,
-    receivables,
     payables,
-    inventory,
     signals,
     actions,
     approveAction,
@@ -82,8 +80,8 @@ export const VyaparAssistantView: React.FC = () => {
           timestamp: 'Just now',
           text:
             language === 'hi'
-              ? `Ram Ram ${proprietorName} bhai! Main hoon aapka Paytm Vyapar AI Sahayak. Dukan ke SBI khate me ₹40,607 cash hai aur aaj ₹8,450 Paytm QR se aa chuka hai. Lekin 5 din baad Sharma Telecom ka ₹45,000 ka bill due hai (-₹4,393 deficit). Amit Verma (₹2,200) aur Neha Sharma (₹1,500) ko WhatsApp paylink bhejkar turant paisa recover karein?`
-              : `Hello ${proprietorName}! I am your Paytm Vyapar AI Business Partner. Abhishek Mobile holds ₹40,607 in cash, with ₹8,450 settled today via Paytm QR. However, Sharma Telecom's ₹45,000 wholesale invoice is due in 5 days (-₹4,393 cash gap). Would you like to dispatch WhatsApp paylinks to Amit Verma (₹2,200) and Neha Sharma (₹1,500) to bridge the gap?`,
+              ? `Ram Ram ${proprietorName} bhai! Main hoon aapka Paytm Vyapar AI Sahayak. Dukan ke SBI khate me ₹40,607 cash hai aur aaj ₹8,450 Paytm QR se aa chuka hai. Lekin 5 din baad Sharma Telecom ka ₹45,000 ka bill due hai (-₹4,393 deficit). Kya Sharma Telecom ke bill ko do kiston (₹25,000 + ₹20,000) me baantkar cash cushion banayein?`
+              : `Hello ${proprietorName}! I am your Paytm Vyapar AI Business Partner. Abhishek Mobile holds ₹40,607 in cash, with ₹8,450 settled today via Paytm QR. However, Sharma Telecom's ₹45,000 wholesale invoice is due in 5 days (-₹4,393 cash gap). Would you like to split the supplier bill into 2 payments (₹25K + ₹20K) to secure a safe +₹15,607 working cushion?`,
           metricsCard: {
             title: '5-Day Cash Runway & Cliff Alert',
             value: '-₹4,393 Deficit Risk',
@@ -91,14 +89,14 @@ export const VyaparAssistantView: React.FC = () => {
             type: 'payable',
           },
           suggestedActions: [
-            { label: '🚀 1-Click WhatsApp Udhaar Paylinks', type: 'action', actionId: 'act-001', variant: 'emerald' },
+            { label: '🤝 Propose 7-Day Split Payment', type: 'action', actionId: 'act_03', variant: 'emerald' },
             { label: '📊 14-Day Cashflow Projection', type: 'tab', payload: 'cashflow', variant: 'indigo' },
-            { label: '🔍 Sharma Telecom Bill Evidence', type: 'evidence', payload: 'EVI-CLIFF-001', variant: 'amber' },
+            { label: '🔍 Sharma Telecom Bill Evidence', type: 'evidence', payload: 'evi_01', variant: 'amber' },
           ],
           audioSpeech:
             language === 'hi'
-              ? `Ram Ram ${proprietorName} bhai. Khate me ₹40,607 cash hai. 5 din baad Sharma Telecom ko ₹45,000 dene hain. Chaliye Amit Verma se udhaar vasoolte hain.`
-              : `Hello ${proprietorName}. You have ₹40,607 cash and a ₹45,000 bill in 5 days. Let's recover customer Udhaar today.`,
+              ? `Ram Ram ${proprietorName} bhai. Khate me ₹40,607 cash hai. 5 din baad Sharma Telecom ko ₹45,000 dene hain. Chaliye bill ko do kiston me baantte hain.`
+              : `Hello ${proprietorName}. You have ₹40,607 cash and a ₹45,000 bill in 5 days. Let's restructure the supplier payment today.`,
         },
       ]);
     }
@@ -123,9 +121,7 @@ export const VyaparAssistantView: React.FC = () => {
       profile,
       financialHealth,
       cashflow,
-      receivables,
       payables,
-      inventory,
       signals,
       actions,
     };
@@ -195,8 +191,8 @@ export const VyaparAssistantView: React.FC = () => {
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         text:
           language === 'hi'
-            ? `✅ Shabaash! Action execute ho gaya hai. Amit Verma (₹2,200) aur Neha Sharma (₹1,500) ko WhatsApp paylink dispatch ho chuka hai. Counter par +₹3,700 aate hi cash buffer safe ho jayega!`
-            : `✅ Action executed! WhatsApp payment links dispatched to Amit Verma (₹2,200) and Neha Sharma (₹1,500). Once recovered, cash buffer rises to safe +₹7,107!`,
+            ? `✅ Shabaash! Action execute ho gaya hai. Sharma Telecom ko ₹25,000 upfront aur ₹20,000 7-din ke deferral ka proposal dispatch ho chuka hai. Dukan par +₹15,607 ka safe cash buffer banta hai!`
+            : `✅ Great action taken! Payment split proposal (₹25,000 upfront + ₹20,000 deferred by 7 days) dispatched to Sharma Telecom. Your cash buffer is now secured at +₹15,607!`,
       };
       setMessages((prev) => [...prev, followUpMsg]);
     } else if (action.type === 'tab' && action.payload) {
@@ -218,14 +214,14 @@ export const VyaparAssistantView: React.FC = () => {
       query: language === 'hi' ? 'Sharma Telecom ka bill kab dena hai aur paise kitne kam hain?' : "When is Sharma Telecom's bill due and what is the cash deficit?",
     },
     {
-      labelHi: '💬 Amit Verma ka Udhaar?',
-      labelEn: '💬 Recover Amit Udhaar?',
-      query: language === 'hi' ? 'Amit Verma ka udhaar recover karne ke liye WhatsApp link bhejo' : 'How do we recover overdue Udhaar from Amit Verma via WhatsApp?',
+      labelHi: '🤝 Sharma bill split?',
+      labelEn: '🤝 Split Supplier Bill?',
+      query: language === 'hi' ? 'Sharma Telecom ke bill ko 2 kiston me kaise baantein?' : 'How do we split Sharma Telecom bill into 2 payments to avoid cash crunch?',
     },
     {
-      labelHi: '📦 Phasa hua stock?',
-      labelEn: '📦 Dead Stock Clearance?',
-      query: language === 'hi' ? 'Dukan me kaunsa maal phasa hua hai jise bechna hai?' : 'What inventory is dead stock and how do we unlock cash from it?',
+      labelHi: '👥 Grahak analytics?',
+      labelEn: '👥 Customer Analytics?',
+      query: language === 'hi' ? 'Dukan ke repeat grahak aur top khareeddar kaun hain?' : 'Who are our top repeat customers and what is our customer repeat rate?',
     },
   ];
 
@@ -480,7 +476,7 @@ export const VyaparAssistantView: React.FC = () => {
                   Immediate deficit: <strong className="font-mono text-rose-900">-₹4,393</strong>.
                 </p>
                 <button
-                  onClick={() => openEvidenceDrawer('EVI-CLIFF-001')}
+                  onClick={() => openEvidenceDrawer('evi_01')}
                   className="text-rose-700 font-semibold text-[11px] hover:underline flex items-center gap-1 mt-1"
                 >
                   Inspect Invoice BILL-SUP-201 in Evidence Drawer <ArrowRight className="w-3 h-3" />
@@ -490,26 +486,26 @@ export const VyaparAssistantView: React.FC = () => {
               {/* Recovery Action Levers */}
               <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
                 <span className="font-bold text-emerald-900 text-xs block">
-                  AI Sahayak Recommended Levers (+₹11,500)
+                  AI Sahayak Recommended Levers (+₹31,200)
                 </span>
                 <div className="space-y-1.5">
                   <div className="flex justify-between items-center text-[11px] text-emerald-800">
-                    <span>1. WhatsApp Paylinks (Amit & Neha)</span>
-                    <span className="font-mono font-bold">+₹3,700</span>
+                    <span>1. Sharma Telecom 7-Day Split</span>
+                    <span className="font-mono font-bold">+₹20,000 Deferral</span>
                   </div>
                   <div className="flex justify-between items-center text-[11px] text-emerald-800">
-                    <span>2. Dead Stock Clearance (9D Glass)</span>
-                    <span className="font-mono font-bold">+₹7,800</span>
+                    <span>2. Distributor Volume Rebate Claim</span>
+                    <span className="font-mono font-bold">+₹11,200 Rebate</span>
                   </div>
                 </div>
                 <Button
                   size="sm"
                   variant="primary"
-                  onClick={() => approveAction('act-001')}
+                  onClick={() => approveAction('act_03')}
                   className="w-full text-xs font-semibold py-1.5 gap-1.5 mt-1"
                 >
                   <Zap className="w-3.5 h-3.5" />
-                  1-Click Trigger Udhaar WhatsApp Recovery
+                  1-Click Propose Sharma Telecom Split Payment
                 </Button>
               </div>
             </CardContent>

@@ -1,16 +1,14 @@
-﻿// ============================================================================
+// ============================================================================
 // MERCHANTMIND — PAYTM VYAPAR AI SAHAYAK (CONVERSATIONAL ENGINE)
 // ============================================================================
 // Deterministic business partner tailored for Bharat retail merchants.
 // Supports both English & colloquial Hinglish/Hindi shopkeeper dialogue.
-// Strictly non-regulated operational advice (Udhaar recovery, inventory velocity, cashflow cliff warnings).
+// Strictly non-regulated operational advice (Supplier restructuring, cashflow cliff warnings).
 
 import type {
   FinancialHealthMetrics,
   CashflowDatapoint,
-  ReceivableRecord,
   PayableRecord,
-  InventoryItem,
   BusinessSignal,
   RecommendedAction,
   MerchantProfile,
@@ -28,7 +26,7 @@ export interface AssistantMetricsCard {
   title: string;
   value: string;
   subtext: string;
-  type: 'cash' | 'payable' | 'receivable' | 'inventory' | 'health';
+  type: 'cash' | 'payable' | 'health';
 }
 
 export interface AssistantReply {
@@ -44,9 +42,7 @@ export interface MerchantContextSnapshot {
   profile: MerchantProfile | null;
   financialHealth: FinancialHealthMetrics | null;
   cashflow: CashflowDatapoint[];
-  receivables: ReceivableRecord[];
   payables: PayableRecord[];
-  inventory: InventoryItem[];
   signals: BusinessSignal[];
   actions: RecommendedAction[];
 }
@@ -58,10 +54,6 @@ export function generateVyaparAssistantResponse(
   const query = userQuery.toLowerCase().trim();
   const name = context.profile?.proprietor?.split(' ')[0] || 'Abhishek';
   const cash = context.financialHealth?.availableCash || 40607;
-  const overdueKhata = context.receivables.filter(r => r.status === 'OVERDUE');
-  const totalOverdue = overdueKhata.reduce((acc, r) => acc + r.outstandingAmount, 0);
-  const deadStock = context.inventory.filter(i => i.status === 'DEAD_STOCK');
-  const deadStockValue = deadStock.reduce((acc, i) => acc + i.totalLockedCapital, 0);
 
   // 1. GREETING / GENERAL SUMMARY / 'DUKAN KA HAAL'
   if (
@@ -75,10 +67,10 @@ export function generateVyaparAssistantResponse(
     query.includes('overview')
   ) {
     return {
-      textEn: `Hello ${name}! Today Abhishek Mobile has ₹${cash.toLocaleString('en-IN')} available cash. Your Paytm Soundbox registered 42 counter sales, but Sharma Telecom's ₹45,000 wholesale bill is due in 5 days with a -₹4,393 cash gap. We have ₹3,700 in overdue customer Udhaar ready to recover via WhatsApp.`,
-      textHi: `Ram Ram ${name} bhai! Dukan ke SBI khate me abhi ₹${cash.toLocaleString('en-IN')} cash hai aur Paytm QR se lagatar grahak payment kar rahe hain. Lekin 5 din baad Sharma Telecom ko ₹45,000 ka bill dena hai aur khate me ₹4,393 kam pad rahe hain. Amit Verma aur Neha Sharma se ₹3,700 udhaar mangne ka link tayar hai.`,
-      audioSpeechEn: `Hello ${name}. You have ₹40,607 cash, but Sharma Telecom's ₹45,000 bill is due in 5 days. Let's recover ₹3,700 from overdue Khata today.`,
-      audioSpeechHi: `${name} bhai, dukan par ₹40,607 cash hai. 5 din baad Sharma Telecom ko ₹45,000 dene hain. Chaliye Amit Verma se udhaar mangte hain.`,
+      textEn: `Hello ${name}! Today Abhishek Mobile has ₹${cash.toLocaleString('en-IN')} available cash. Your Paytm Soundbox registered 42 counter sales, but Sharma Telecom's ₹45,000 wholesale bill is due in 5 days with a -₹4,393 cash gap. We recommend splitting the bill into 2 tranches to keep a safe +₹15,607 buffer.`,
+      textHi: `Ram Ram ${name} bhai! Dukan ke SBI khate me abhi ₹${cash.toLocaleString('en-IN')} cash hai aur Paytm QR se lagatar grahak payment kar rahe hain. Lekin 5 din baad Sharma Telecom ko ₹45,000 ka bill dena hai aur khate me ₹4,393 kam pad rahe hain. Sharma Telecom ke bill ko 2 kiston me baant kar hum dukan ko safe rakh sakte hain.`,
+      audioSpeechEn: `Hello ${name}. You have ₹40,607 cash, but Sharma Telecom's ₹45,000 bill is due in 5 days. Let's restructure the supplier bill into 2 payments.`,
+      audioSpeechHi: `${name} bhai, dukan par ₹40,607 cash hai. 5 din baad Sharma Telecom ko ₹45,000 dene hain. Chaliye bill ko do kiston me baantte hain.`,
       metricsCard: {
         title: '5-Day Cash Runway & Cliff Alert',
         value: '-₹4,393 Deficit Risk',
@@ -86,9 +78,9 @@ export function generateVyaparAssistantResponse(
         type: 'payable',
       },
       suggestedActions: [
-        { label: '🚀 Dispatch WhatsApp Udhaar Paylinks', type: 'action', actionId: 'act-001', variant: 'emerald' },
-        { label: '📊 View 14-Day Cashflow Radar', type: 'tab', payload: 'cashflow', variant: 'indigo' },
-        { label: '🔍 Inspect Bill Evidence', type: 'evidence', payload: 'EVI-CLIFF-001', variant: 'amber' },
+        { label: '🤝 Sharma Telecom Bill 2-Kiston me Bantein', type: 'action', actionId: 'act_03', variant: 'emerald' },
+        { label: '📊 14-Din ka Cashflow Radar Dekhein', type: 'tab', payload: 'cashflow', variant: 'indigo' },
+        { label: '🔍 Sharma Telecom Bill Proof', type: 'evidence', payload: 'evi_01', variant: 'amber' },
       ],
     };
   }
@@ -133,10 +125,10 @@ export function generateVyaparAssistantResponse(
     query.includes('due')
   ) {
     return {
-      textEn: `Urgent supplier alert: Sharma Telecom's distributor bill (BILL-SUP-201) of ₹45,000 falls due on the 12th (5 days away). With current liquid reserves of ₹${cash.toLocaleString('en-IN')}, Abhishek Mobile faces an acute deficit of -₹4,393. If left unaddressed, the payment will bounce or drain all cash reserves.`,
-      textHi: `Zaroori Bill Alert: Sharma Telecom ka ₹45,000 ka invoice (BILL-SUP-201) 5 din baad due hai. Hamare khate me abhi ₹${cash.toLocaleString('en-IN')} hai, jisse theek -₹4,393 kam pad rahe hain. Agar abhi se intezam nahi kiya toh supplier ka cheque fas sakta hai.`,
-      audioSpeechEn: `Sharma Telecom's ₹45,000 bill is due in 5 days. You have a -₹4,393 shortfall. Recover Udhaar to cover the gap.`,
-      audioSpeechHi: `Sharma Telecom ko 5 din me ₹45,000 dene hain. ₹4,393 ki kami hai. Chaliye grahako se udhaar recover karte hain.`,
+      textEn: `Urgent supplier alert: Sharma Telecom's distributor bill (BILL-SUP-201) of ₹45,000 falls due on Oct 9 (5 days away). With current liquid reserves of ₹${cash.toLocaleString('en-IN')}, Abhishek Mobile faces an acute deficit of -₹4,393. We recommend proposing a 2-part tranche: ₹25,000 on Oct 9 and ₹20,000 on Oct 16 to maintain a +₹15,607 cushion.`,
+      textHi: `Zaroori Bill Alert: Sharma Telecom ka ₹45,000 ka invoice (BILL-SUP-201) 5 din baad due hai. Hamare khate me abhi ₹${cash.toLocaleString('en-IN')} hai, jisse theek -₹4,393 kam pad rahe hain. Agar hum ₹25,000 turant aur ₹20,000 7 din baad dene ka schedule bhejein, toh dukan ke paas ₹15,607 ka safe cushion bana rahega.`,
+      audioSpeechEn: `Sharma Telecom's ₹45,000 bill is due in 5 days. You have a -₹4,393 shortfall. Split into 2 tranches to stay safe.`,
+      audioSpeechHi: `Sharma Telecom ko 5 din me ₹45,000 dene hain. ₹4,393 ki kami hai. 7-din ka payment split karke buffer banayein.`,
       metricsCard: {
         title: 'Sharma Telecom Due (5 Days)',
         value: '₹45,000 Due',
@@ -144,74 +136,41 @@ export function generateVyaparAssistantResponse(
         type: 'payable',
       },
       suggestedActions: [
-        { label: '🚀 Dispatch WhatsApp Recovery Paylinks', type: 'action', actionId: 'act-001', variant: 'emerald' },
-        { label: '🔍 Inspect Bill Invoice Proof', type: 'evidence', payload: 'EVI-CLIFF-001', variant: 'amber' },
+        { label: '🤝 Split Payment (₹25K + ₹20K)', type: 'action', actionId: 'act_03', variant: 'emerald' },
+        { label: '🔍 Inspect Bill Invoice Proof', type: 'evidence', payload: 'evi_01', variant: 'amber' },
         { label: '🏢 View Supplier Payables', type: 'tab', payload: 'payables', variant: 'indigo' },
       ],
     };
   }
 
-  // 4. UDHAAR / KHATA / AMIT VERMA / NEHA SHARMA / RECEIVABLES
+  // 4. CUSTOMER INTELLIGENCE / REPEAT PATTERNS / FOOTFALL
   if (
-    query.includes('udhaar') ||
-    query.includes('khata') ||
-    query.includes('amit') ||
-    query.includes('neha') ||
-    query.includes('receivable') ||
     query.includes('customer') ||
-    query.includes('recover') ||
-    query.includes('vasooli') ||
-    query.includes('whatsapp')
+    query.includes('grahak') ||
+    query.includes('repeat') ||
+    query.includes('loyal') ||
+    query.includes('vip') ||
+    query.includes('rfm')
   ) {
     return {
-      textEn: `Abhishek Mobile has ₹${totalOverdue.toLocaleString('en-IN')} in high-risk customer Udhaar pending past 30 days. Specifically, Amit Verma owes ₹2,200 (pending 38 days) and Neha Sharma owes ₹1,500. MerchantMind has prepared polite WhatsApp payment requests with dynamic 1-tap Paytm UPI links offering a 2% early clearing discount.`,
-      textHi: `Dukan ka ₹${totalOverdue.toLocaleString('en-IN')} ka Udhaar 30 din se zyada purana hai. Amit Verma ke ₹2,200 (38 din purana) aur Neha Sharma ke ₹1,500 atke hain. Humne WhatsApp par bhejane ke liye polite payment reminder aur 2% discount wala Paytm UPI link taiyar kar diya hai.`,
-      audioSpeechEn: `You have ₹3,700 in overdue Udhaar from Amit Verma and Neha Sharma. Tap below to send 1-click WhatsApp paylinks.`,
-      audioSpeechHi: `Amit Verma aur Neha Sharma se ₹3,700 udhaar lena hai. Niche click karke turant WhatsApp link bhej sakte hain.`,
+      textEn: `Customer Intelligence: Abhishek Mobile has 5 registered high-value customer profiles with total lifetime spend exceeding ₹4.8 Lakhs. Top customer Amit Verma has visited 34 times, while Vikram Singh has 42 repeat orders. Overall repeat purchase rate is 64%.`,
+      textHi: `Grahak Analytics: Abhishek Mobile ke paas 5 high-value verified grahak hain jinka total kharch ₹4.8 Lakh se zyada hai. Amit Verma 34 baar aur Vikram Singh 42 baar dukan par aaye hain. Aapka repeat grahak rate 64% hai jo bazar se kaafi behtar hai.`,
+      audioSpeechEn: `You have strong repeat customer engagement with 64% repeat rate and ₹4.8 Lakh lifetime spend across top customers.`,
+      audioSpeechHi: `Aapka repeat customer rate 64% hai. Top grahako ka total purchase ₹4.8 Lakh se zyada hai.`,
       metricsCard: {
-        title: 'Trapped Customer Khata Credit',
-        value: `₹${totalOverdue.toLocaleString('en-IN')} Overdue`,
-        subtext: 'Amit Verma (₹2,200) + Neha Sharma (₹1,500)',
-        type: 'receivable',
+        title: 'Repeat Customer Intelligence',
+        value: '64% Repeat Rate',
+        subtext: 'Top: Amit Verma (34 visits), Vikram (42 visits)',
+        type: 'health',
       },
       suggestedActions: [
-        { label: '📲 1-Click WhatsApp Paylink Dispatch', type: 'action', actionId: 'act-001', variant: 'emerald' },
-        { label: '📖 Open Khata Receivables Ledger', type: 'tab', payload: 'khata', variant: 'indigo' },
-        { label: '👥 Inspect Customer Credit Profiles', type: 'tab', payload: 'customers', variant: 'slate' },
+        { label: '👥 Open Customer Directory', type: 'tab', payload: 'customers', variant: 'indigo' },
+        { label: '📈 Check Sales Overview', type: 'tab', payload: 'overview', variant: 'slate' },
       ],
     };
   }
 
-  // 5. INVENTORY / DEAD STOCK / PHASA MAAL / TEMPERED GLASS
-  if (
-    query.includes('stock') ||
-    query.includes('inventory') ||
-    query.includes('maal') ||
-    query.includes('dead') ||
-    query.includes('glass') ||
-    query.includes('cover') ||
-    query.includes('stagnant') ||
-    query.includes('clearance')
-  ) {
-    return {
-      textEn: `We detected ₹${deadStockValue.toLocaleString('en-IN')} locked in slow-moving accessory inventory (e.g. 14 units of Edge-to-Edge 9D Tempered Glass and Armor Cases unsold for >45 days). We recommend launching a 48-Hour Weekend Flash Sale with a 25% discount to unlock ₹7,800 in instant counter liquidity.`,
-      textHi: `Dukan ke shelf par ₹${deadStockValue.toLocaleString('en-IN')} ka accessory stock 45 din se nahi bika hai (9D Tempered Glass aur Shockproof Covers). Humne 48-ghante ki Weekend Flash Sale taiyar ki hai jisme 25% chhoot dekar counter par ₹7,800 turant cash unlock ho jayega.`,
-      audioSpeechEn: `₹7,800 is locked in slow-moving tempered glass and phone covers. Launch a 48-hour flash sale to convert stock to cash.`,
-      audioSpeechHi: `Tempered glass aur covers me ₹7,800 ka maal atka hai. 48-ghante ki flash sale shuru karke cash nikal sakte hain.`,
-      metricsCard: {
-        title: 'Stagnant Stock Value',
-        value: `₹${deadStockValue.toLocaleString('en-IN')} Stalled`,
-        subtext: 'Zero movement >45 days (Covers & Glass)',
-        type: 'inventory',
-      },
-      suggestedActions: [
-        { label: '⚡ Launch 48-Hr Stock Clearance Sale', type: 'action', actionId: 'act-002', variant: 'emerald' },
-        { label: '📦 Open Inventory Velocity Dashboard', type: 'tab', payload: 'inventory', variant: 'indigo' },
-      ],
-    };
-  }
-
-  // 6. HEALTH / SCORE / PROFIT / RUNWAY
+  // 5. HEALTH / SCORE / PROFIT / RUNWAY
   if (
     query.includes('health') ||
     query.includes('score') ||
@@ -223,10 +182,10 @@ export function generateVyaparAssistantResponse(
     const healthScore = context.financialHealth?.healthScore || 82;
     const runway = context.financialHealth?.cashRunwayDays || 11.4;
     return {
-      textEn: `Abhishek Mobile's business health score is ${healthScore}/100. Your current working capital runway is ${runway} days. While customer footfall and gross margin (28.4%) are healthy, your liquidity coverage ratio is 0.90x due to the impending supplier bill. Recovering trapped Khata will restore your runway to 22.5 safe days.`,
-      textHi: `Abhishek Mobile ka business health score ${healthScore}/100 hai aur dukan ka working capital runway ${runway} din ka hai. Grahak footfall aur munafa (28.4%) accha hai, par Sharma Telecom ke bill ki wajah se cash coverage 0.90x par hai. Udhaar recover karte hi runway safe 22.5 din ho jayega.`,
-      audioSpeechEn: `Your health score is ${healthScore}/100 with ${runway} days of runway. Recovering Udhaar will boost your liquidity.`,
-      audioSpeechHi: `Aapka health score ${healthScore}/100 hai aur ${runway} din ka runway hai. Udhaar recover karte hi cash balance safe ho jayega.`,
+      textEn: `Abhishek Mobile's business health score is ${healthScore}/100. Your current working capital runway is ${runway} days. While customer footfall and gross margin (28.4%) are healthy, your liquidity coverage ratio is under pressure from the ₹45,000 supplier bill. Executing the 7-day payment split restores your runway to 22.5 safe days.`,
+      textHi: `Abhishek Mobile ka business health score ${healthScore}/100 hai aur dukan ka working capital runway ${runway} din ka hai. Grahak footfall aur munafa (28.4%) accha hai, par Sharma Telecom ke bill ki wajah se cash par dabav hai. Supplier split approve karne se runway safe 22.5 din ho jayega.`,
+      audioSpeechEn: `Your health score is ${healthScore}/100 with ${runway} days of runway. Restructuring the bill will boost your liquidity.`,
+      audioSpeechHi: `Aapka health score ${healthScore}/100 hai aur ${runway} din ka runway hai. Supplier split se cash balance safe ho jayega.`,
       metricsCard: {
         title: 'Financial Health Score',
         value: `${healthScore}/100`,
@@ -242,14 +201,14 @@ export function generateVyaparAssistantResponse(
 
   // DEFAULT / FALLBACK
   return {
-    textEn: `I'm your Paytm Vyapar AI Sahayak, ${name}! I monitor your Paytm QR transactions, Soundbox voice telemetry, customer Udhaar, and wholesale supplier dues. Ask me about your cashflow, impending distributor bills, recovering customer Khata, or clearing dead stock.`,
-    textHi: `Main hoon aapka Paytm Vyapar AI Sahayak, ${name} bhai! Main aapke Paytm QR, Soundbox audio payments, grahako ke Udhaar aur wholesale bills par 24/7 nazar rakhta hoon. Mujhse dukan ki bikri, Sharma Telecom ke bill, Amit Verma ke Udhaar, ya dead stock ke bare me poochiye!`,
-    audioSpeechEn: `I am your Paytm Vyapar AI Sahayak. Ask me about today's collection, Sharma Telecom's bill, or recovering Udhaar.`,
-    audioSpeechHi: `Main aapka Paytm Vyapar Sahayak hoon. Mujhse dukan ki bikri, supplier bill ya Udhaar recovery ke bare me poochiye.`,
+    textEn: `I'm your Paytm Vyapar AI Sahayak, ${name}! I monitor your Paytm QR transactions, Soundbox voice telemetry, cashflow runway, and wholesale supplier dues. Ask me about your cash balance, upcoming distributor bills, or repeat customer footfall.`,
+    textHi: `Main hoon aapka Paytm Vyapar AI Sahayak, ${name} bhai! Main aapke Paytm QR, Soundbox audio payments, cashflow runway aur wholesale supplier bills par 24/7 nazar rakhta hoon. Mujhse dukan ki bikri, Sharma Telecom ke bill ya grahako ke bare me poochiye!`,
+    audioSpeechEn: `I am your Paytm Vyapar AI Sahayak. Ask me about today's collection, Sharma Telecom's bill, or cashflow radar.`,
+    audioSpeechHi: `Main aapka Paytm Vyapar Sahayak hoon. Mujhse dukan ki bikri, supplier bill ya cashflow radar ke bare me poochiye.`,
     suggestedActions: [
-      { label: '🚨 Sharma Telecom Bill & Cash Gap', type: 'evidence', payload: 'EVI-CLIFF-001', variant: 'amber' },
-      { label: '📲 Recover ₹3,700 Customer Udhaar', type: 'action', actionId: 'act-001', variant: 'emerald' },
-      { label: '⚡ Clear ₹7,800 Dead Stock', type: 'action', actionId: 'act-002', variant: 'indigo' },
+      { label: '🚨 Sharma Telecom Bill & Cash Gap', type: 'evidence', payload: 'evi_01', variant: 'amber' },
+      { label: '🤝 Split ₹45K Supplier Payment', type: 'action', actionId: 'act_03', variant: 'emerald' },
+      { label: '📊 14-Day Cashflow Radar', type: 'tab', payload: 'cashflow', variant: 'indigo' },
     ],
   };
 }

@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   MessageSquare,
   Mic,
@@ -58,9 +58,7 @@ export const VyaparAssistantModal: React.FC = () => {
     profile,
     financialHealth,
     cashflow,
-    receivables,
     payables,
-    inventory,
     signals,
     actions,
     approveAction,
@@ -88,8 +86,8 @@ export const VyaparAssistantModal: React.FC = () => {
         timestamp: 'Just now',
         text:
           language === 'hi'
-            ? `Ram Ram ${proprietorName} bhai! Main hoon aapka Paytm Vyapar AI Sahayak. Dukan ke SBI khate me ₹40,607 cash hai aur aaj ₹8,450 Paytm QR se aaya hai. Lekin 5 din baad Sharma Telecom ka ₹45,000 ka bill due hai (-₹4,393 gap). Mujhse dukan ki bikri, bills ya udhaar ke bare me poochiye!`
-            : `Hello ${proprietorName}! I'm your Paytm Vyapar AI Sahayak. Abhishek Mobile has ₹40,607 cash, with ₹8,450 settled from today's Paytm QR. However, Sharma Telecom's ₹45,000 bill is due in 5 days (-₹4,393 gap). Ask me anything about your cashflow, supplier bills, or customer Udhaar!`,
+            ? `Ram Ram ${proprietorName} bhai! Main hoon aapka Paytm Vyapar AI Sahayak. Dukan ke SBI khate me ₹40,607 cash hai aur aaj ₹8,450 Paytm QR se aaya hai. Lekin 5 din baad Sharma Telecom ka ₹45,000 ka bill due hai (-₹4,393 gap). Mujhse dukan ki bikri, bills ya cashflow ke bare me poochiye!`
+            : `Hello ${proprietorName}! I'm your Paytm Vyapar AI Sahayak. Abhishek Mobile has ₹40,607 cash, with ₹8,450 settled from today's Paytm QR. However, Sharma Telecom's ₹45,000 bill is due in 5 days (-₹4,393 gap). Ask me anything about your cashflow, supplier bills, or repeat sales!`,
         metricsCard: {
           title: '5-Day Cash Runway & Cliff Alert',
           value: '-₹4,393 Deficit Risk',
@@ -97,14 +95,14 @@ export const VyaparAssistantModal: React.FC = () => {
           type: 'payable',
         },
         suggestedActions: [
-          { label: '📲 Amit Verma se Udhaar Vasooli Paylink', type: 'action', actionId: 'act-001', variant: 'emerald' },
+          { label: '🤝 Sharma Telecom Bill 2-Kiston me Bantein', type: 'action', actionId: 'act_03', variant: 'emerald' },
           { label: '📊 14-Din ka Cashflow Radar Dekhein', type: 'tab', payload: 'cashflow', variant: 'indigo' },
-          { label: '🔍 Sharma Telecom Bill Proof', type: 'evidence', payload: 'EVI-CLIFF-001', variant: 'amber' },
+          { label: '🔍 Sharma Telecom Bill Proof', type: 'evidence', payload: 'evi_01', variant: 'amber' },
         ],
         audioSpeech:
           language === 'hi'
-            ? `Ram Ram ${proprietorName} bhai. Khate me ₹40,607 cash hai aur 5 din baad Sharma Telecom ko ₹45,000 dene hain. Chaliye Amit Verma se udhaar vasoolte hain.`
-            : `Hello ${proprietorName}. You have ₹40,607 cash and a ₹45,000 supplier bill due in 5 days. Let's recover customer Udhaar today.`,
+            ? `Ram Ram ${proprietorName} bhai. Khate me ₹40,607 cash hai aur 5 din baad Sharma Telecom ko ₹45,000 dene hain. Chaliye supplier bill ko do kiston me baantte hain.`
+            : `Hello ${proprietorName}. You have ₹40,607 cash and a ₹45,000 supplier bill due in 5 days. Let's restructure the supplier payment today.`,
       };
       setMessages([initialGreeting]);
     }
@@ -138,9 +136,7 @@ export const VyaparAssistantModal: React.FC = () => {
       profile,
       financialHealth,
       cashflow,
-      receivables,
       payables,
-      inventory,
       signals,
       actions,
     };
@@ -212,8 +208,8 @@ export const VyaparAssistantModal: React.FC = () => {
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         text:
           language === 'hi'
-            ? `✅ Shabaash! Action execute ho gaya hai. Amit Verma (₹2,200) aur Neha Sharma (₹1,500) ko WhatsApp paylink dispatch ho chuka hai. Counter par +₹3,700 aate hi cash buffer safe ho jayega!`
-            : `✅ Great action taken! WhatsApp payment links dispatched to Amit Verma (₹2,200) and Neha Sharma (₹1,500). Once recovered, your cash buffer rises to a safe +₹7,107!`,
+            ? `✅ Shabaash! Action execute ho gaya hai. Sharma Telecom ko ₹25,000 upfront aur ₹20,000 7-din ke deferral ka proposal dispatch ho chuka hai. Dukan par +₹15,607 ka safe cash buffer banta hai!`
+            : `✅ Great action taken! Payment split proposal (₹25,000 upfront + ₹20,000 deferred by 7 days) dispatched to Sharma Telecom. Your cash buffer is now secured at +₹15,607!`,
       };
       setMessages((prev) => [...prev, followUpMsg]);
     } else if (action.type === 'tab' && action.payload) {
@@ -236,14 +232,14 @@ export const VyaparAssistantModal: React.FC = () => {
       query: language === 'hi' ? 'Sharma Telecom ka bill kab dena hai aur paise kitne kam hain?' : "When is Sharma Telecom's bill due and what is the cash deficit?",
     },
     {
-      labelHi: '💬 Amit Verma ka Udhaar?',
-      labelEn: '💬 Recover Amit Udhaar?',
-      query: language === 'hi' ? 'Amit Verma ka udhaar recover karne ke liye WhatsApp link bhejo' : 'How do we recover overdue Udhaar from Amit Verma via WhatsApp?',
+      labelHi: '🤝 Sharma bill split?',
+      labelEn: '🤝 Split Supplier Bill?',
+      query: language === 'hi' ? 'Sharma Telecom ke bill ko 2 kiston me kaise baantein?' : 'How do we split Sharma Telecom bill into 2 payments to avoid cash crunch?',
     },
     {
-      labelHi: '📦 Phasa hua stock?',
-      labelEn: '📦 Dead Stock Clearance?',
-      query: language === 'hi' ? 'Dukan me kaunsa maal phasa hua hai jise bechna hai?' : 'What inventory is dead stock and how do we unlock cash from it?',
+      labelHi: '👥 Grahak analytics?',
+      labelEn: '👥 Customer Analytics?',
+      query: language === 'hi' ? 'Dukan ke repeat grahak aur top khareeddar kaun hain?' : 'Who are our top repeat customers and what is our customer repeat rate?',
     },
   ];
 

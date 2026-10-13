@@ -10,7 +10,6 @@ import {
   BookOpen,
   HardDrive,
   FileSpreadsheet,
-  Package,
   MessageSquare,
   Settings,
   Activity,
@@ -57,7 +56,6 @@ export const ConnectionsView: React.FC = () => {
   const getIcon = (category: string, id: string) => {
     if (id === 'conn_paytm') return QrCode;
     if (id === 'conn_whatsapp') return MessageSquare;
-    if (id === 'conn_inventory') return Package;
 
     switch (category) {
       case 'PAYMENTS':
@@ -68,8 +66,6 @@ export const ConnectionsView: React.FC = () => {
         return BookOpen;
       case 'POS':
         return HardDrive;
-      case 'INVENTORY':
-        return Package;
       default:
         return FileSpreadsheet;
     }
@@ -85,8 +81,6 @@ export const ConnectionsView: React.FC = () => {
         return 'Every 2 minutes (Counter Terminal)';
       case 'conn_tally':
         return 'Hourly / On-Save XML Bridge';
-      case 'conn_inventory':
-        return 'Every 15 minutes (Barcode Sync)';
       case 'conn_whatsapp':
         return 'Real-Time Event Hook';
       default:

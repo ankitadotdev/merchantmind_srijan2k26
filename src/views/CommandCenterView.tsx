@@ -35,9 +35,7 @@ export const CommandCenterView: React.FC = () => {
     financialHealth,
     opportunities,
     signals,
-    receivables,
     payables,
-    inventory,
     openEvidenceDrawer,
     setActiveAppTab,
     runIntelligenceScan,
@@ -140,10 +138,10 @@ export const CommandCenterView: React.FC = () => {
             🚨 {language === 'hi' ? 'Sharma Telecom Bill?' : 'Sharma Telecom Bill?'}
           </button>
           <button
-            onClick={() => openAssistant(language === 'hi' ? 'Amit Verma ka udhaar recover karne ke liye WhatsApp link bhejo' : 'How do we recover overdue Udhaar from Amit Verma?')}
-            className="px-3 py-1.5 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/90 text-emerald-200 text-xs font-semibold border border-emerald-800/60 transition-colors cursor-pointer"
+            onClick={() => openAssistant(language === 'hi' ? 'Sharma Telecom ke bill ko 2 kiston me kaise baantein?' : 'How do we split Sharma Telecom bill into 2 payments?')}
+            className="px-3 py-1.5 rounded-xl bg-indigo-950/70 hover:bg-indigo-900/90 text-indigo-200 text-xs font-semibold border border-indigo-800/60 transition-colors cursor-pointer"
           >
-            💬 {language === 'hi' ? 'Udhaar WhatsApp Link' : 'Udhaar Paylinks'}
+            🤝 {language === 'hi' ? 'Bill Split Schedule' : 'Split Supplier Bill'}
           </button>
           <button
             onClick={() => setIsBriefingOpen(true)}
@@ -180,7 +178,7 @@ export const CommandCenterView: React.FC = () => {
                   Supplier Payment Due in 5 Days
                 </Badge>
                 <span className="text-[11px] font-mono text-slate-600 font-bold bg-white px-2 py-0.5 rounded border border-slate-200">
-                  Financial Stake: ₹99,967 total identified exposure
+                  Financial Stake: ₹45,000 distributor bill
                 </span>
               </div>
               <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1.5">
@@ -193,8 +191,8 @@ export const CommandCenterView: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-700 pt-1 font-medium">
                   <span>• Supplier payment due in 5 days (₹45,000)</span>
                   <span>• Current operating cash is insufficient (₹40,607)</span>
-                  <span>• ₹3,700 trapped in overdue Khata</span>
-                  <span>• ₹10,660 locked in stagnant inventory</span>
+                  <span>• Restructure into 2 tranches (₹25K on Oct 9 + ₹20K on Oct 16)</span>
+                  <span>• Protects business and creates +₹15,607 safe cushion</span>
                 </div>
               </div>
             </div>
@@ -216,7 +214,7 @@ export const CommandCenterView: React.FC = () => {
               onClick={() => setActiveAppTab('opportunities')}
               className="bg-rose-600 hover:bg-rose-700 text-xs font-semibold shadow-xs h-9"
             >
-              <span>Review Recovery Path (+₹11.5K)</span>
+              <span>Review Restructuring Plan (+₹20K Deferral)</span>
               <ArrowRight className="w-3.5 h-3.5 ml-1" />
             </Button>
           </div>
@@ -253,18 +251,18 @@ export const CommandCenterView: React.FC = () => {
 
           {/* 4. Recommended Recovery */}
           <div className="p-3.5 bg-emerald-50/90 rounded-xl border border-emerald-300 shadow-2xs">
-            <span className="text-[10px] text-emerald-800 font-bold block uppercase">4. Recoverable Value</span>
+            <span className="text-[10px] text-emerald-800 font-bold block uppercase">4. Restructuring Deferral</span>
             <span className="text-lg font-extrabold text-emerald-700 font-mono block mt-0.5">
-              +{formatINR(11500)}
+              +{formatINR(20000)}
             </span>
-            <span className="text-[10px] text-emerald-800 font-sans font-medium block mt-0.5">₹3.7K Khata + ₹7.8K Stock</span>
+            <span className="text-[10px] text-emerald-800 font-sans font-medium block mt-0.5">₹20K Deferred to Oct 16</span>
           </div>
 
           {/* 5. Post-Recovery Cushion */}
           <div className="p-3.5 bg-slate-900 text-white rounded-xl border border-slate-800 shadow-2xs col-span-2 sm:col-span-1">
             <span className="text-[10px] text-emerald-400 font-bold block uppercase">5. Projected Position</span>
             <span className="text-lg font-extrabold text-emerald-400 font-mono block mt-0.5">
-              +{formatINR(7107)}
+              +{formatINR(15607)}
             </span>
             <span className="text-[10px] text-slate-300 font-sans block mt-0.5">Safe Working Cushion</span>
           </div>
@@ -317,35 +315,35 @@ export const CommandCenterView: React.FC = () => {
           </span>
         </Card>
 
-        {/* C. Money At Risk - Overdue Khata */}
+        {/* C. Upcoming Obligations - Urgent Payables */}
         <Card className="p-4 border-rose-200 bg-rose-50/20">
-          <span className="text-xs font-medium text-rose-800 block">Overdue Khata (&gt;30d)</span>
+          <span className="text-xs font-medium text-rose-800 block">Supplier Payables (Next 7d)</span>
           <div className="flex items-baseline justify-between mt-1">
             <span className="text-xl font-bold font-mono text-rose-700">
-              {formatINR(financialHealth.overdueReceivables)}
+              {formatINR(financialHealth.urgentPayablesNext7Days)}
             </span>
             <Badge variant="rose" size="sm">
-              2 Accounts
+              Critical
             </Badge>
           </div>
           <span className="text-[11px] text-rose-600 mt-1 block">
-            Amit Verma & Neha Sharma
+            Sharma Telecom (Due Oct 9)
           </span>
         </Card>
 
-        {/* D. Money At Risk - Dead Stock */}
-        <Card className="p-4 border-amber-200 bg-amber-50/20">
-          <span className="text-xs font-medium text-amber-800 block">Dead Stock Capital Locked</span>
+        {/* D. Monthly Revenue Velocity */}
+        <Card className="p-4 border-indigo-200 bg-indigo-50/20">
+          <span className="text-xs font-medium text-indigo-800 block">Monthly Revenue Velocity</span>
           <div className="flex items-baseline justify-between mt-1">
-            <span className="text-xl font-bold font-mono text-amber-900">
-              {formatINR(financialHealth.deadStockCapitalLocked)}
+            <span className="text-xl font-bold font-mono text-indigo-900">
+              {formatINR(financialHealth.totalRevenueMonthly)}
             </span>
-            <Badge variant="amber" size="sm">
-              47+ Days Stagnant
+            <Badge variant="indigo" size="sm">
+              +{financialHealth.totalRevenueMoMDelta}% MoM
             </Badge>
           </div>
-          <span className="text-[11px] text-amber-700 mt-1 block">
-            iPhone 11 & OnePlus 7 stock
+          <span className="text-[11px] text-indigo-700 mt-1 block">
+            Gross Margin: {financialHealth.grossProfitMargin}%
           </span>
         </Card>
       </div>

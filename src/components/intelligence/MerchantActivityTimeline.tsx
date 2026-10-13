@@ -4,8 +4,6 @@ import {
   Radio,
   AlertTriangle,
   RefreshCw,
-  BookOpen,
-  Package,
   Volume2,
   CheckCircle2,
   ExternalLink,
@@ -35,10 +33,6 @@ export const MerchantActivityTimeline: React.FC<MerchantActivityTimelineProps> =
         return <Radio className="w-3.5 h-3.5 text-rose-600" />;
       case 'RISK':
         return <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />;
-      case 'KHATA':
-        return <BookOpen className="w-3.5 h-3.5 text-indigo-600" />;
-      case 'INVENTORY':
-        return <Package className="w-3.5 h-3.5 text-amber-600" />;
       case 'TRANSACTION':
         return <Volume2 className="w-3.5 h-3.5 text-sky-600" />;
       default:
