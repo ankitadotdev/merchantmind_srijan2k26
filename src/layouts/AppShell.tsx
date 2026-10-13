@@ -4,6 +4,8 @@ import { TopNavbar } from './TopNavbar';
 import { AppSidebar } from './AppSidebar';
 import { EvidenceDrawer } from './EvidenceDrawer';
 import { GuidedTourModal } from './GuidedTourModal';
+import { VyaparAssistantModal } from '../components/assistant/VyaparAssistantModal';
+import { WhatsAppBriefingModal } from '../components/assistant/WhatsAppBriefingModal';
 
 export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -28,6 +30,8 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
       <EvidenceDrawer />
       <GuidedTourModal />
+      <VyaparAssistantModal />
+      <WhatsAppBriefingModal />
     </div>
   );
 };

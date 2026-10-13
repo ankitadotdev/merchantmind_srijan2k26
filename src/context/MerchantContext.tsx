@@ -64,6 +64,17 @@ interface MerchantContextValue {
   isTourOpen: boolean;
   openTour: () => void;
   closeTour: () => void;
+
+  // Language & Conversational Assistant
+  language: 'en' | 'hi';
+  setLanguage: (lang: 'en' | 'hi') => void;
+  isAssistantOpen: boolean;
+  setIsAssistantOpen: (open: boolean) => void;
+  assistantInitialPrompt: string | null;
+  openAssistant: (initialPrompt?: string) => void;
+  closeAssistant: () => void;
+  isBriefingOpen: boolean;
+  setIsBriefingOpen: (open: boolean) => void;
 }
 
 const MerchantContext = createContext<MerchantContextValue | undefined>(undefined);
@@ -97,6 +108,24 @@ export const MerchantProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Guided Tour
   const [isTourOpen, setIsTourOpen] = useState<boolean>(false);
+
+  // Language & Assistant State
+  const [language, setLanguage] = useState<'en' | 'hi'>('hi');
+  const [isAssistantOpen, setIsAssistantOpen] = useState<boolean>(false);
+  const [assistantInitialPrompt, setAssistantInitialPrompt] = useState<string | null>(null);
+  const [isBriefingOpen, setIsBriefingOpen] = useState<boolean>(false);
+
+  const openAssistant = (initialPrompt?: string) => {
+    if (initialPrompt) {
+      setAssistantInitialPrompt(initialPrompt);
+    }
+    setIsAssistantOpen(true);
+  };
+
+  const closeAssistant = () => {
+    setIsAssistantOpen(false);
+    setAssistantInitialPrompt(null);
+  };
 
   const refreshData = useCallback(async () => {
     setIsLoading(true);
@@ -250,6 +279,15 @@ export const MerchantProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         isTourOpen,
         openTour,
         closeTour,
+        language,
+        setLanguage,
+        isAssistantOpen,
+        setIsAssistantOpen,
+        assistantInitialPrompt,
+        openAssistant,
+        closeAssistant,
+        isBriefingOpen,
+        setIsBriefingOpen,
       }}
     >
       {children}
