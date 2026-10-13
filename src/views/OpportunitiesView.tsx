@@ -99,12 +99,12 @@ export const OpportunitiesView: React.FC = () => {
             <span className="text-[11px] text-slate-300 mt-0.5 block">Current funds: ₹40,607 (-₹4.3K gap)</span>
           </div>
           <div className="p-2.5 bg-slate-800/80 rounded-xl border border-slate-700/80">
-            <span className="text-cyan-400 block font-semibold text-[11px]">3. Payment Split</span>
-            <span className="text-[11px] text-slate-300 mt-0.5 block">Split into ₹25K + ₹20K tranches</span>
+            <span className="text-cyan-400 block font-semibold text-[11px]">3. Overdue Khata</span>
+            <span className="text-[11px] text-slate-300 mt-0.5 block">₹3,700 trapped in 34d+ ledgers</span>
           </div>
           <div className="p-2.5 bg-slate-800/80 rounded-xl border border-slate-700/80">
-            <span className="text-emerald-400 block font-semibold text-[11px]">4. Distributor Rebate</span>
-            <span className="text-[11px] text-slate-300 mt-0.5 block">₹11,200 eligible credit note claim</span>
+            <span className="text-emerald-400 block font-semibold text-[11px]">4. Stagnant Stock</span>
+            <span className="text-[11px] text-slate-300 mt-0.5 block">₹10,660 locked in idle accessories</span>
           </div>
         </div>
       </div>
@@ -115,8 +115,9 @@ export const OpportunitiesView: React.FC = () => {
           { id: 'ALL', label: `All (${opportunities.length})` },
           { id: 'CRITICAL', label: 'Critical' },
           { id: 'HIGH', label: 'High Priority' },
-          { id: 'SUPPLIER_PAYMENT', label: 'Supplier Payments' },
-          { id: 'PRICING_OPTIMIZATION', label: 'Rebates & Margins' },
+          { id: 'SUPPLIER_PAYMENT', label: 'Supplier Cliffs' },
+          { id: 'OVERDUE_RECEIVABLES', label: 'Khata Delays' },
+          { id: 'DEAD_STOCK', label: 'Dead Stock' },
         ].map((tab) => (
           <button
             key={tab.id}

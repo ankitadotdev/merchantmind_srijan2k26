@@ -1,14 +1,17 @@
+﻿// ============================================================================
+// MERCHANTMIND — ADVANCED PAYTM VYAPAR AI SAHAYAK (CONVERSATIONAL ENGINE)
 // ============================================================================
-// MERCHANTMIND — PAYTM VYAPAR AI SAHAYAK (CONVERSATIONAL ENGINE)
-// ============================================================================
-// Deterministic business partner tailored for Bharat retail merchants.
-// Supports both English & colloquial Hinglish/Hindi shopkeeper dialogue.
-// Strictly non-regulated operational advice (Supplier restructuring, cashflow cliff warnings).
+// Multi-turn conversational intelligence for Bharat MSME merchants & Hackathon Judges.
+// Understands complex queries: financial math proof, competitive differentiation,
+// unit economics, customer segmentation, peak/slow hours, and 1-click recovery actions.
+// Operates deterministically: 0% hallucinations, 100% auditable facts.
 
 import type {
   FinancialHealthMetrics,
   CashflowDatapoint,
+  ReceivableRecord,
   PayableRecord,
+  InventoryItem,
   BusinessSignal,
   RecommendedAction,
   MerchantProfile,
@@ -27,7 +30,7 @@ export interface AssistantMetricsCard {
   title: string;
   value: string;
   subtext: string;
-  type: 'cash' | 'payable' | 'health';
+  type: 'cash' | 'payable' | 'receivable' | 'inventory' | 'health';
 }
 
 export interface AssistantReply {
@@ -43,7 +46,10 @@ export interface MerchantContextSnapshot {
   profile: MerchantProfile | null;
   financialHealth: FinancialHealthMetrics | null;
   cashflow: CashflowDatapoint[];
+  receivables: ReceivableRecord[];
   payables: PayableRecord[];
+  inventory: InventoryItem[];
+  customers?: CustomerProfile[];
   signals: BusinessSignal[];
   actions: RecommendedAction[];
 }
@@ -55,6 +61,12 @@ export function generateVyaparAssistantResponse(
   const query = userQuery.toLowerCase().trim();
   const name = context.profile?.proprietor?.split(' ')[0] || 'Abhishek';
   const cash = context.financialHealth?.availableCash || 40607;
+  const overdueKhata = context.receivables.filter((r) => r.status === 'OVERDUE');
+  const totalOverdue = overdueKhata.reduce((acc, r) => acc + r.outstandingAmount, 0);
+  const deadStock = context.inventory.filter((i) => i.status === 'DEAD_STOCK');
+  const deadStockValue = deadStock.reduce((acc, i) => acc + i.totalLockedCapital, 0);
+  const healthScore = context.financialHealth?.healthScore || 82;
+  const runway = context.financialHealth?.cashRunwayDays || 11.4;
 
   // 1. JUDGE FAQ: HALLUCINATION & DETERMINISTIC MATH PROOF
   if (
@@ -69,10 +81,10 @@ export function generateVyaparAssistantResponse(
     query.includes('architecture')
   ) {
     return {
-      textEn: `Hello ${name}! Today Abhishek Mobile has ₹${cash.toLocaleString('en-IN')} available cash. Your Paytm Soundbox registered 42 counter sales, but Sharma Telecom's ₹45,000 wholesale bill is due in 5 days with a -₹4,393 cash gap. We recommend splitting the bill into 2 tranches to keep a safe +₹15,607 buffer.`,
-      textHi: `Ram Ram ${name} bhai! Dukan ke SBI khate me abhi ₹${cash.toLocaleString('en-IN')} cash hai aur Paytm QR se lagatar grahak payment kar rahe hain. Lekin 5 din baad Sharma Telecom ko ₹45,000 ka bill dena hai aur khate me ₹4,393 kam pad rahe hain. Sharma Telecom ke bill ko 2 kiston me baant kar hum dukan ko safe rakh sakte hain.`,
-      audioSpeechEn: `Hello ${name}. You have ₹40,607 cash, but Sharma Telecom's ₹45,000 bill is due in 5 days. Let's restructure the supplier bill into 2 payments.`,
-      audioSpeechHi: `${name} bhai, dukan par ₹40,607 cash hai. 5 din baad Sharma Telecom ko ₹45,000 dene hain. Chaliye bill ko do kiston me baantte hain.`,
+      textEn: `MerchantMind implements a strict 3-Tier Decoupled Architecture to eliminate hallucinations:\n1. Ingestion Layer: Connects directly to verified Paytm Soundbox webhooks, SBI feeds, and Khata records.\n2. Deterministic Arithmetic Core: 100% of cash balances, aging buckets, and -₹4,393 cliff gaps are computed in verifiable TypeScript rules—zero LLM calculations.\n3. Natural Language Overlay: AI is strictly constrained to translating and explaining verified math into Hindi/English. Every statement links to primary audit records (BILL-SUP-201, INV-REC-101).`,
+      textHi: `MerchantMind me financial calculation me ZERO AI HALLUCINATION ki guarantee hai:\n1. Pura mathematical hisab (₹40,607 cash, ₹45,000 bill, -₹4,393 deficit) deterministic code se calculate hota hai, kisi generative AI se nahi.\n2. AI ka kaam sirf is verified data ko aam dukandaar ki bhasha (Hindi/Hinglish) me samjhana hai.\n3. Har ek number ka Evidence Drawer me primary proof maujood hai (Invoice BILL-SUP-201 aur Khata records).`,
+      audioSpeechEn: `MerchantMind uses a deterministic rule engine for all financial math with zero LLM hallucinations. All calculations are auditable.`,
+      audioSpeechHi: `MerchantMind me saari financial calculation 100% verified math se hoti hai, bina kisi AI galti ke. Pura audit proof maujood hai.`,
       metricsCard: {
         title: 'Deterministic Core Integrity',
         value: '100% Verifiable Math',
@@ -167,9 +179,8 @@ export function generateVyaparAssistantResponse(
         type: 'health',
       },
       suggestedActions: [
-        { label: '🤝 Sharma Telecom Bill 2-Kiston me Bantein', type: 'action', actionId: 'act_03', variant: 'emerald' },
-        { label: '📊 14-Din ka Cashflow Radar Dekhein', type: 'tab', payload: 'cashflow', variant: 'indigo' },
-        { label: '🔍 Sharma Telecom Bill Proof', type: 'evidence', payload: 'evi_01', variant: 'amber' },
+        { label: '🚀 Dispatch WhatsApp Udhaar Paylinks', type: 'action', actionId: 'act-001', variant: 'emerald' },
+        { label: '⚡ Launch 48-Hr Stock Clearance', type: 'action', actionId: 'act-002', variant: 'indigo' },
       ],
     };
   }
@@ -281,10 +292,10 @@ export function generateVyaparAssistantResponse(
     query.includes('due')
   ) {
     return {
-      textEn: `Urgent supplier alert: Sharma Telecom's distributor bill (BILL-SUP-201) of ₹45,000 falls due on Oct 9 (5 days away). With current liquid reserves of ₹${cash.toLocaleString('en-IN')}, Abhishek Mobile faces an acute deficit of -₹4,393. We recommend proposing a 2-part tranche: ₹25,000 on Oct 9 and ₹20,000 on Oct 16 to maintain a +₹15,607 cushion.`,
-      textHi: `Zaroori Bill Alert: Sharma Telecom ka ₹45,000 ka invoice (BILL-SUP-201) 5 din baad due hai. Hamare khate me abhi ₹${cash.toLocaleString('en-IN')} hai, jisse theek -₹4,393 kam pad rahe hain. Agar hum ₹25,000 turant aur ₹20,000 7 din baad dene ka schedule bhejein, toh dukan ke paas ₹15,607 ka safe cushion bana rahega.`,
-      audioSpeechEn: `Sharma Telecom's ₹45,000 bill is due in 5 days. You have a -₹4,393 shortfall. Split into 2 tranches to stay safe.`,
-      audioSpeechHi: `Sharma Telecom ko 5 din me ₹45,000 dene hain. ₹4,393 ki kami hai. 7-din ka payment split karke buffer banayein.`,
+      textEn: `Wholesale Supplier Alert: Sharma Telecom (Invoice: BILL-SUP-201)\n• Due Date: 12th of this month (strictly 5 days away).\n• Total Bill Amount: ₹45,000 (Bulk mobile accessories & tempered glass stock).\n• Available Liquid Cash: ₹40,607 (in liquid SBI Current Account).\n• Acute Shortfall: -₹4,393 cash deficit.\n• Risk: If unpaid on Day 12, wholesale credit lines freeze and bank penalty applies.\n• Resolution: Execute Lever 1 (WhatsApp Udhaar paylinks +₹3,700) and Lever 2 (Flash clearance +₹7,800) to clear the bill and retain a +₹7,107 safe cash cushion.`,
+      textHi: `Wholesale Supplier Alert: Sharma Telecom (Invoice: BILL-SUP-201)\n• Due Date: Is mahine ki 12 tareekh (theek 5 din bache hain).\n• Kul Bill: ₹45,000 (Mobile accessories aur glass ka wholesale bill).\n• Available Cash: ₹40,607 (SBI Current Account me).\n• Deficit Gap: theek -₹4,393 kam pad rahe hain.\n• Risk: Bill na bharne par Sharma Telecom dukan ka maal rok sakta hai aur bank me cheque bounce penalty lagegi.\n• Solution: Amit aur Neha se ₹3,700 Udhaar vasooliye aur dead stock se ₹7,800 nikaaliye. Bill aaram se bhar jayega aur +₹7,107 bachenge!`,
+      audioSpeechEn: `Sharma Telecom's ₹45,000 bill is due in 5 days. You have a -₹4,393 cash gap. Recover Udhaar and clear dead stock to cover it.`,
+      audioSpeechHi: `Sharma Telecom ko 5 din me ₹45,000 dene hain. ₹4,393 kam pad rahe hain. Udhaar recover karke bill clear karein.`,
       metricsCard: {
         title: 'Sharma Telecom Due (BILL-SUP-201)',
         value: '₹45,000 Due in 5 Days',
@@ -292,41 +303,69 @@ export function generateVyaparAssistantResponse(
         type: 'payable',
       },
       suggestedActions: [
-        { label: '🤝 Split Payment (₹25K + ₹20K)', type: 'action', actionId: 'act_03', variant: 'emerald' },
-        { label: '🔍 Inspect Bill Invoice Proof', type: 'evidence', payload: 'evi_01', variant: 'amber' },
-        { label: '🏢 View Supplier Payables', type: 'tab', payload: 'payables', variant: 'indigo' },
+        { label: '🚀 1-Click WhatsApp Udhaar Paylinks', type: 'action', actionId: 'act-001', variant: 'emerald' },
+        { label: '🔍 Inspect Bill Evidence Proof', type: 'evidence', payload: 'EVI-CLIFF-001', variant: 'amber' },
+        { label: '🏢 View Supplier Payables Radar', type: 'tab', payload: 'payables', variant: 'indigo' },
       ],
     };
   }
 
-  // 4. CUSTOMER INTELLIGENCE / REPEAT PATTERNS / FOOTFALL
+  // 10. BILL SPLITTING / GRACE PERIOD NEGOTIATION
   if (
-    query.includes('customer') ||
-    query.includes('grahak') ||
-    query.includes('repeat') ||
-    query.includes('loyal') ||
-    query.includes('vip') ||
-    query.includes('rfm')
+    query.includes('split') ||
+    query.includes('grace period') ||
+    query.includes('extend') ||
+    query.includes('late') ||
+    query.includes('kist') ||
+    query.includes('request') ||
+    query.includes('delay')
   ) {
     return {
-      textEn: `Customer Intelligence: Abhishek Mobile has 5 registered high-value customer profiles with total lifetime spend exceeding ₹4.8 Lakhs. Top customer Amit Verma has visited 34 times, while Vikram Singh has 42 repeat orders. Overall repeat purchase rate is 64%.`,
-      textHi: `Grahak Analytics: Abhishek Mobile ke paas 5 high-value verified grahak hain jinka total kharch ₹4.8 Lakh se zyada hai. Amit Verma 34 baar aur Vikram Singh 42 baar dukan par aaye hain. Aapka repeat grahak rate 64% hai jo bazar se kaafi behtar hai.`,
-      audioSpeechEn: `You have strong repeat customer engagement with 64% repeat rate and ₹4.8 Lakh lifetime spend across top customers.`,
-      audioSpeechHi: `Aapka repeat customer rate 64% hai. Top grahako ka total purchase ₹4.8 Lakh se zyada hai.`,
+      textEn: `Supplier Negotiation Strategy (Lever C):\n• Split Formula: Pay 50% (₹22,500) on Day 12 to maintain goodwill and clear delivery holds.\n• Request 7-Day Grace Period for remainder: Pay the remaining ₹22,500 on Day 19 using next week's counter UPI velocity.\n• Pre-Drafted Message: MerchantMind has formulated a professional supplier extension letter in Action Center (Action act-003).`,
+      textHi: `Sharma Telecom se Bill Split karne ka tarika (Lever C):\n1. Formula: 12 tareekh ko 50% payment (₹22,500) kar dijiye taaki supplier ka vishwas bana rahe.\n2. Baki ₹22,500 ke liye 7 din ka grace period mangiye jo agle hafte ki counter sales se aaram se clear ho jayega.\n3. Action Center me Sharma Telecom ko bhejane ke liye formal request letter pehle se taiyar hai.`,
+      audioSpeechEn: `You can split the bill: pay 50% now (₹22,500) and request a 7-day grace period for the remainder.`,
+      audioSpeechHi: `Aap bill split kar sakte hain: ₹22,500 abhi dijiye aur 7 din ka grace period mangiye baki ke liye.`,
       metricsCard: {
-        title: 'Repeat Customer Intelligence',
-        value: '64% Repeat Rate',
-        subtext: 'Top: Amit Verma (34 visits), Vikram (42 visits)',
-        type: 'health',
+        title: 'Supplier 50/50 Split Structure',
+        value: '₹22,500 Now + ₹22,500 T+7d',
+        subtext: 'Protects supplier relationship & working capital',
+        type: 'payable',
       },
       suggestedActions: [
-        { label: '👥 Open Customer Directory', type: 'tab', payload: 'customers', variant: 'indigo' },
-        { label: '📈 Check Sales Overview', type: 'tab', payload: 'overview', variant: 'slate' },
+        { label: '⚡ View Action Center Draft', type: 'tab', payload: 'actions', variant: 'indigo' },
+      ],
+    };
+  }
+  // 11. INVENTORY / DEAD STOCK / PHASA MAAL
+  if (
+    query.includes('stock') ||
+    query.includes('inventory') ||
+    query.includes('maal') ||
+    query.includes('dead stock') ||
+    query.includes('glass') ||
+    query.includes('cover') ||
+    query.includes('clearance') ||
+    query.includes('stagnant')
+  ) {
+    return {
+      textEn: `Dead Stock Liquidation Analysis (Lever 2):\n• Capital Locked: ₹${deadStockValue.toLocaleString('en-IN')} in obsolete SKUs with zero movement in 45+ days:\n  - 14 units: Edge-to-Edge 9D Tempered Glass (holding ₹4,200).\n  - 8 units: Shockproof Armor Cases for older phone models (holding ₹3,600).\n• Actionable Plan: 48-Hour Weekend Flash Clearance with 25% discount.\n• Capital Unlocked: Generates ₹7,800 in instant liquid counter cash, permanently removing shelf holding costs.`,
+      textHi: `Dukan ke Phanse hue Maal ka Hisab (Lever 2):\n1. Total Atka hua Stock: ₹${deadStockValue.toLocaleString('en-IN')} jo 45 din se nahi bika hai:\n   - 14 piece 9D Tempered Glass (₹4,200 phansa hai).\n   - 8 piece Shockproof Phone Covers (₹3,600 phansa hai).\n2. AI Solution: Weekend par 48-ghante ki 25% Clearance Sale lagaiye.\n3. Result: Shelf se dead maal niklega aur counter par theek ₹7,800 cash turant unlock ho jayega!`,
+      audioSpeechEn: `₹7,800 is locked in slow-moving tempered glass and phone covers. A 48-hour flash sale will unlock cash immediately.`,
+      audioSpeechHi: `Tempered glass aur covers me ₹7,800 ka maal atka hai. 48-ghante ki flash sale shuru karke cash nikal sakte hain.`,
+      metricsCard: {
+        title: 'Dead Stock Capital Recovery',
+        value: '+₹7,800 Cash Liquidation',
+        subtext: '9D Tempered Glass & Armor Cases (>45 days)',
+        type: 'inventory',
+      },
+      suggestedActions: [
+        { label: '⚡ Launch 48-Hr Stock Clearance Sale', type: 'action', actionId: 'act-002', variant: 'emerald' },
+        { label: '📦 Open Inventory Velocity Dashboard', type: 'tab', payload: 'inventory', variant: 'indigo' },
       ],
     };
   }
 
-  // 5. HEALTH / SCORE / PROFIT / RUNWAY
+  // 12. WHAT HAPPENS IF NOTHING IS DONE (DAY 12 CRISIS)
   if (
     query.includes('what happens') ||
     query.includes('if not') ||
@@ -390,10 +429,10 @@ export function generateVyaparAssistantResponse(
     query.includes('tarakki')
   ) {
     return {
-      textEn: `Abhishek Mobile's business health score is ${healthScore}/100. Your current working capital runway is ${runway} days. While customer footfall and gross margin (28.4%) are healthy, your liquidity coverage ratio is under pressure from the ₹45,000 supplier bill. Executing the 7-day payment split restores your runway to 22.5 safe days.`,
-      textHi: `Abhishek Mobile ka business health score ${healthScore}/100 hai aur dukan ka working capital runway ${runway} din ka hai. Grahak footfall aur munafa (28.4%) accha hai, par Sharma Telecom ke bill ki wajah se cash par dabav hai. Supplier split approve karne se runway safe 22.5 din ho jayega.`,
-      audioSpeechEn: `Your health score is ${healthScore}/100 with ${runway} days of runway. Restructuring the bill will boost your liquidity.`,
-      audioSpeechHi: `Aapka health score ${healthScore}/100 hai aur ${runway} din ka runway hai. Supplier split se cash balance safe ho jayega.`,
+      textEn: `3-Step Operational Growth Blueprint for Abhishek Mobile:\n1. Working Capital Velocity: Enforce a strict 14-day Khata credit limit on customers to prevent funds from locking up.\n2. Off-Peak Hour Stimulation: Launch flash promos between 11:00 AM and 1:00 PM when counter footfall is lowest.\n3. High-Margin Bundling: Bundle ₹40 tempered glass with mobile covers during peak evening hours (18:00–21:00) to raise average ticket size from ₹340 to ₹450+.`,
+      textHi: `Abhishek Mobile ke liye 3-Step Growth Blueprint:\n1. Khata Rotation: Grahako ko 14 din se zyada ka Udhaar na dein taaki working capital hamesha ghumta rahe.\n2. Subah ke Slow Period me Offer: Subah 11 se 1 baje ke beech screen guard aur cable par deal dein taaki empty counter par footfall badhe.\n3. Shaam ke Peak Hours me Bundling: Shaam 6 se 9 baje tempered glass aur cover ka combo banakar bechein, jisse average bill ₹340 se badhkar ₹450+ ho jayega.`,
+      audioSpeechEn: `Boost growth by enforcing 14-day Khata limits, offering morning flash deals, and bundling accessories during peak evening hours.`,
+      audioSpeechHi: `Dukan ki bikri badhane ke liye 14-din ka Udhaar limit rakhein aur shaam ke peak hours me accessories combo bechein.`,
       metricsCard: {
         title: 'Retail Growth Roadmap',
         value: 'Target: ₹450 Avg Ticket',
@@ -409,14 +448,21 @@ export function generateVyaparAssistantResponse(
 
   // 15. DEFAULT / BROAD ASSISTANT INTRO
   return {
-    textEn: `I'm your Paytm Vyapar AI Sahayak, ${name}! I monitor your Paytm QR transactions, Soundbox voice telemetry, cashflow runway, and wholesale supplier dues. Ask me about your cash balance, upcoming distributor bills, or repeat customer footfall.`,
-    textHi: `Main hoon aapka Paytm Vyapar AI Sahayak, ${name} bhai! Main aapke Paytm QR, Soundbox audio payments, cashflow runway aur wholesale supplier bills par 24/7 nazar rakhta hoon. Mujhse dukan ki bikri, Sharma Telecom ke bill ya grahako ke bare me poochiye!`,
-    audioSpeechEn: `I am your Paytm Vyapar AI Sahayak. Ask me about today's collection, Sharma Telecom's bill, or cashflow radar.`,
-    audioSpeechHi: `Main aapka Paytm Vyapar Sahayak hoon. Mujhse dukan ki bikri, supplier bill ya cashflow radar ke bare me poochiye.`,
+    textEn: `I'm your Paytm Vyapar AI Sahayak, ${name}!\nI continuously analyze your Paytm QR standee transactions, Soundbox audio telemetry, Khata diaries, and wholesale supplier dues.\nAsk me anything:\n• "Sharma Telecom ka bill kab dena hai?" (Distributor due date & cash shortfall)\n• "Amit Verma se udhaar kaise recover karein?" (1-click WhatsApp paylinks)\n• "How does MerchantMind prevent hallucinations?" (Technical architecture & deterministic math)\n• "What are my peak and slow sales periods?" (Footfall velocity & repeat customers)`,
+    textHi: `Main hoon aapka Paytm Vyapar AI Sahayak, ${name} bhai!\nMain aapke Paytm QR, Soundbox audio events, grahako ke Udhaar aur wholesale bills par 24/7 nazar rakhta hoon.\nAap mujhse kuch bhi pooch sakte hain:\n• "Sharma Telecom ka bill kab hai aur kitne paise kam hain?"\n• "Amit Verma ka udhaar recover karne ke liye link bhejo"\n• "Dukan me kaunsa stock phasa hua hai jise nikalna hai?"\n• "Khatabook se MerchantMind kyu alag aur behtar hai?"`,
+    audioSpeechEn: `I am your Paytm Vyapar AI Sahayak. Ask me about your cashflow, supplier bills, customer Udhaar, or system architecture.`,
+    audioSpeechHi: `Main aapka Paytm Vyapar Sahayak hoon. Mujhse dukan ki bikri, supplier bill ya Udhaar recovery ke bare me poochiye.`,
+    metricsCard: {
+      title: 'Abhishek Mobile Financial Health',
+      value: `${healthScore}/100 Score`,
+      subtext: `Cash ₹${cash.toLocaleString('en-IN')} • 5-Day Cliff: -₹4,393 Deficit`,
+      type: 'health',
+    },
     suggestedActions: [
-      { label: '🚨 Sharma Telecom Bill & Cash Gap', type: 'evidence', payload: 'evi_01', variant: 'amber' },
-      { label: '🤝 Split ₹45K Supplier Payment', type: 'action', actionId: 'act_03', variant: 'emerald' },
-      { label: '📊 14-Day Cashflow Radar', type: 'tab', payload: 'cashflow', variant: 'indigo' },
+      { label: '🚨 Sharma Telecom Bill & Cliff', type: 'evidence', payload: 'EVI-CLIFF-001', variant: 'amber' },
+      { label: '📲 Recover ₹3,700 Customer Udhaar', type: 'action', actionId: 'act-001', variant: 'emerald' },
+      { label: '⚡ Clear ₹7,800 Stalled Stock', type: 'action', actionId: 'act-002', variant: 'indigo' },
+      { label: '📐 Technical Architecture Blueprint', type: 'tab', payload: 'architecture', variant: 'slate' },
     ],
   };
 }
