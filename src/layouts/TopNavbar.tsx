@@ -1,0 +1,367 @@
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  Compass,
+  LayoutDashboard,
+  Presentation,
+  Play,
+  Activity,
+  User,
+  Menu,
+  X,
+  Search,
+  CheckCircle2,
+  ChevronDown,
+  Layers,
+  Radio,
+  Zap,
+  CheckSquare,
+  ShieldCheck,
+  RefreshCw,
+  ExternalLink,
+  RotateCcw,
+} from 'lucide-react';
+import { useMerchant } from '../context/MerchantContext';
+import { Button } from '../components/ui/Button';
+import { Badge } from '../components/ui/Badge';
+import { DEMO_SCENARIOS } from '../mock/demoData';
+import type { BusinessScenarioId } from '../types';
+
+interface TopNavbarProps {
+  isMobileMenuOpen: boolean;
+  setIsMobileMenuOpen: (open: boolean) => void;
+}
+
+export const TopNavbar: React.FC<TopNavbarProps> = ({
+  isMobileMenuOpen,
+  setIsMobileMenuOpen,
+}) => {
+  const {
+    activeWorld,
+    setActiveWorld,
+    profile,
+    openTour,
+    activeScenario,
+    switchScenario,
+    resetDemo,
+    signals,
+    opportunities,
+    actions,
+    connections,
+    setActiveAppTab,
+  } = useMerchant();
+
+  const [isStatusOpen, setIsStatusOpen] = useState(false);
+  const [isScenarioOpen, setIsScenarioOpen] = useState(false);
+  const statusRef = useRef<HTMLDivElement>(null);
+  const scenarioRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdowns on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (statusRef.current && !statusRef.current.contains(e.target as Node)) {
+        setIsStatusOpen(false);
+      }
+      if (scenarioRef.current && !scenarioRef.current.contains(e.target as Node)) {
+        setIsScenarioOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const activeScenarioObj = DEMO_SCENARIOS.find((s) => s.id === activeScenario) || DEMO_SCENARIOS[0];
+  const pendingActionsCount = actions.filter((a) => a.status === 'AWAITING_APPROVAL' || a.status === 'DRAFT').length;
+
+  return (
+    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 gap-4">
+          {/* Logo & Brand */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 -ml-2 text-slate-500 hover:text-slate-800 md:hidden rounded-lg hover:bg-slate-100"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+
+            <div
+              onClick={() => setActiveWorld('showcase')}
+              className="flex items-center gap-2.5 cursor-pointer group"
+            >
+              <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-sm shadow-indigo-200 group-hover:bg-indigo-700 transition-colors">
+                <Compass className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-slate-900 tracking-tight text-base">
+                    MerchantMind
+                  </span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-200">
+                    B2B OS
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400 font-medium leading-none hidden sm:block">
+                  Fintech Intelligence & Decision Platform
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Center: Dual-World Experience Switcher */}
+          <div className="hidden lg:flex items-center p-1 bg-slate-100/90 rounded-xl border border-slate-200/80 shadow-xs">
+            <button
+              onClick={() => setActiveWorld('showcase')}
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeWorld === 'showcase'
+                  ? 'bg-white text-indigo-700 shadow-xs border border-slate-200/60'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
+                }`}
+            >
+              <Presentation className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Public Showcase & Architecture</span>
+            </button>
+            <button
+              onClick={() => setActiveWorld('app')}
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${activeWorld === 'app'
+                  ? 'bg-white text-indigo-700 shadow-xs border border-slate-200/60'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
+                }`}
+            >
+              <LayoutDashboard className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Merchant Command Center</span>
+            </button>
+          </div>
+
+          {/* Right Actions, Live Telemetry & Scenario Controller */}
+          <div className="flex items-center gap-2.5">
+            {/* Live Telemetry Indicator & Status Popover */}
+            <div className="relative" ref={statusRef}>
+              <button
+                onClick={() => setIsStatusOpen(!isStatusOpen)}
+                className="flex items-center gap-2 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100/80 text-emerald-800 rounded-lg border border-emerald-200 text-xs font-medium transition-colors cursor-pointer"
+                title="Click to view live system telemetry status"
+              >
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="hidden sm:inline font-mono text-[11px] font-semibold">LIVE</span>
+                <span className="text-slate-400 hidden sm:inline">•</span>
+                <span className="text-emerald-700 text-xs font-semibold">6/6 Synced</span>
+                <ChevronDown className="w-3 h-3 text-emerald-600" />
+              </button>
+
+              {/* Compact System Status Dropdown */}
+              {isStatusOpen && (
+                <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-slate-200 p-4 space-y-3 z-50 text-xs animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <strong className="text-slate-900 font-bold">SYSTEM TELEMETRY STATUS</strong>
+                    </div>
+                    <Badge variant="emerald" size="sm">ACTIVE</Badge>
+                  </div>
+
+                  <div className="space-y-2 text-slate-600">
+                    <div className="flex justify-between items-center py-1 border-b border-slate-50">
+                      <span>Merchant Monitoring:</span>
+                      <strong className="text-emerald-700 font-semibold font-mono">ACTIVE (Continuous)</strong>
+                    </div>
+                    <div className="flex justify-between items-center py-1 border-b border-slate-50">
+                      <span>Connected Sources:</span>
+                      <strong className="text-slate-900 font-mono">6 / 6 Healthy</strong>
+                    </div>
+                    <div className="flex justify-between items-center py-1 border-b border-slate-50">
+                      <span>Last Synchronization:</span>
+                      <strong className="text-slate-700 font-mono">32 sec ago</strong>
+                    </div>
+                    <div className="flex justify-between items-center py-1 border-b border-slate-50">
+                      <span>Signals Evaluated:</span>
+                      <strong className="text-slate-900 font-mono">24 Heuristics</strong>
+                    </div>
+                    <div className="flex justify-between items-center py-1 border-b border-slate-50">
+                      <span>Opportunities Detected:</span>
+                      <strong className="text-indigo-600 font-mono">{opportunities.length} Active</strong>
+                    </div>
+                    <div className="flex justify-between items-center py-1">
+                      <span>Actions Awaiting Approval:</span>
+                      <strong className="text-amber-600 font-mono">{pendingActionsCount} Pending</strong>
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200/80 text-[11px] text-slate-500 leading-snug">
+                    <span className="font-semibold text-slate-700 block mb-0.5">Deterministic Guardrail:</span>
+                    All financial values are strictly reconciled against canonical source records with zero probabilistic hallucination.
+                  </div>
+
+                  <div className="pt-1 flex items-center justify-between">
+                    <button
+                      onClick={() => {
+                        setIsStatusOpen(false);
+                        setActiveWorld('app');
+                        setActiveAppTab('connections');
+                      }}
+                      className="text-indigo-600 hover:text-indigo-800 font-semibold text-[11px] flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>Manage Connections</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </button>
+                    <span className="text-[10px] text-slate-400 font-mono">Demo Mode</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Demo Scenario Controller Dropdown */}
+            <div className="relative" ref={scenarioRef}>
+              <button
+                onClick={() => setIsScenarioOpen(!isScenarioOpen)}
+                className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 hover:bg-slate-200/70 text-slate-800 rounded-lg border border-slate-200 text-xs font-medium transition-colors cursor-pointer"
+                title="Switch demo scenarios"
+              >
+                <span className="text-slate-500 text-[11px] hidden md:inline">Scenario:</span>
+                <span className="font-semibold text-slate-900 truncate max-w-[120px] sm:max-w-[150px]">
+                  {activeScenarioObj.name}
+                </span>
+                <ChevronDown className="w-3 h-3 text-slate-500" />
+              </button>
+
+              {/* Scenario Selector Dropdown */}
+              {isScenarioOpen && (
+                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-slate-200 p-3 space-y-2 z-50 text-xs animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-2 px-1">
+                    <div>
+                      <strong className="text-slate-900 font-bold block">DEMO MODE CONTROLLER</strong>
+                      <span className="text-[11px] text-slate-400">Deterministic presentation controls & recoverable sandbox</span>
+                    </div>
+                    <Badge variant="indigo" size="sm">Judge Controls</Badge>
+                  </div>
+
+                  {/* Judge Quick Action Bar (Part 18) */}
+                  <div className="p-2 bg-slate-50 rounded-xl border border-slate-200/80 grid grid-cols-2 gap-1.5 text-[11px]">
+                    <button
+                      onClick={async () => {
+                        await resetDemo();
+                        setIsScenarioOpen(false);
+                      }}
+                      className="p-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg flex items-center gap-1.5 text-slate-700 font-semibold cursor-pointer"
+                    >
+                      <RotateCcw className="w-3 h-3 text-indigo-600" />
+                      <span>Reset Demo</span>
+                    </button>
+
+                    <button
+                      onClick={async () => {
+                        await switchScenario('abhishek-mobile-crisis');
+                        setIsScenarioOpen(false);
+                      }}
+                      className="p-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg flex items-center gap-1.5 text-slate-700 font-semibold cursor-pointer"
+                    >
+                      <RefreshCw className="w-3 h-3 text-emerald-600" />
+                      <span>Restart Scenario</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setIsScenarioOpen(false);
+                        openTour();
+                      }}
+                      className="p-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg flex items-center gap-1.5 text-slate-700 font-semibold cursor-pointer"
+                    >
+                      <Play className="w-3 h-3 text-indigo-600" />
+                      <span>Replay Tour</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setIsScenarioOpen(false);
+                        setActiveWorld('app');
+                        setActiveAppTab('actions');
+                      }}
+                      className="p-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg flex items-center gap-1.5 text-slate-700 font-semibold cursor-pointer"
+                    >
+                      <CheckSquare className="w-3 h-3 text-cyan-600" />
+                      <span>View Actions</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setIsScenarioOpen(false);
+                        setActiveWorld('showcase');
+                      }}
+                      className="p-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg col-span-2 flex items-center justify-center gap-1.5 text-slate-700 font-semibold cursor-pointer"
+                    >
+                      <ExternalLink className="w-3 h-3 text-slate-500" />
+                      <span>Return to Public Showcase</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-1.5 max-h-80 overflow-y-auto pr-1">
+                    {DEMO_SCENARIOS.map((scen) => {
+                      const isSelected = activeScenario === scen.id;
+                      return (
+                        <button
+                          key={scen.id}
+                          onClick={async () => {
+                            await switchScenario(scen.id as BusinessScenarioId);
+                            setIsScenarioOpen(false);
+                          }}
+                          className={`w-full text-left p-2.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${isSelected
+                              ? 'bg-indigo-50/80 border-indigo-300 shadow-2xs'
+                              : 'bg-white border-slate-150 hover:bg-slate-50 hover:border-slate-300'
+                            }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+                              {scen.name}
+                              {scen.id === 'abhishek-mobile-crisis' && (
+                                <Badge variant="rose" size="sm" className="text-[9px] py-0 px-1">FLAGSHIP</Badge>
+                              )}
+                            </span>
+                            <Badge variant={isSelected ? 'indigo' : 'slate'} size="sm">
+                              {scen.badge}
+                            </Badge>
+                          </div>
+                          <p className="text-[11px] text-slate-600 mt-1 leading-snug">
+                            {scen.headline} — {scen.description}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Launch Guided Tour */}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={openTour}
+              className="hidden sm:inline-flex border-indigo-200 text-indigo-700 hover:bg-indigo-50 text-xs"
+            >
+              <Play className="w-3 h-3 mr-1 text-indigo-600 fill-indigo-600" />
+              <span>Judge Tour</span>
+            </Button>
+
+            {/* Merchant Persona Badge */}
+            <div className="flex items-center gap-2 pl-1.5 border-l border-slate-200">
+              <div className="w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                AK
+              </div>
+              <div className="hidden xl:block text-left">
+                <div className="text-xs font-semibold text-slate-900 leading-tight">
+                  {profile?.proprietor || 'Abhishek Kumar'}
+                </div>
+                <div className="text-[10px] text-slate-500 leading-none truncate max-w-[120px]">
+                  {profile?.businessName || 'Abhishek Mobile & Accessories'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
