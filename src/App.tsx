@@ -21,6 +21,7 @@ import { HowItWorksView } from './views/HowItWorksView';
 import { ArchitectureView } from './views/ArchitectureView';
 import { PaytmEcosystemView } from './views/PaytmEcosystemView';
 import { SettingsView } from './views/SettingsView';
+import { VyaparAssistantView } from './views/VyaparAssistantView';
 
 const AppContent: React.FC = () => {
   const { activeWorld, activeAppTab, isLoading } = useMerchant();
@@ -47,6 +48,8 @@ const AppContent: React.FC = () => {
   // World B: Operational Merchant Application
   const renderAppView = () => {
     switch (activeAppTab) {
+      case 'vyapar-assistant':
+        return <VyaparAssistantView />;
       case 'command-center':
         return <CommandCenterView />;
       case 'financial-health':

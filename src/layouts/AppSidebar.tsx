@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   LayoutDashboard,
+  MessageSquare,
   Activity,
   TrendingUp,
   Receipt,
@@ -37,6 +38,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
     signals,
     opportunities,
     actions,
+    language,
   } = useMerchant();
 
   const urgentPayablesCount = payables.filter((p) => p.isCliff || p.priority === 'URGENT').length;
@@ -50,68 +52,75 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
 
   const navGroups = [
     {
-      groupTitle: 'COMMAND',
+      groupTitle: language === 'hi' ? 'दुकान कमांड' : 'COMMAND',
       items: [
-        { id: 'command-center', label: 'Command Center', icon: LayoutDashboard },
-        { id: 'financial-health', label: 'Financial Health', icon: Activity },
-        { id: 'cashflow', label: 'Cashflow & Cliff', icon: TrendingUp },
-        { id: 'transactions', label: 'Transactions', icon: Receipt },
+        { id: 'command-center', label: language === 'hi' ? 'कमांड सेंटर' : 'Command Center', icon: LayoutDashboard },
+        {
+          id: 'vyapar-assistant',
+          label: language === 'hi' ? 'AI व्यापार सहायक' : 'AI Vyapar Sahayak',
+          icon: MessageSquare,
+          badge: 'VOICE 🎙️',
+          badgeVariant: 'cyan' as const,
+        },
+        { id: 'cashflow', label: language === 'hi' ? 'कैशफ्लो और बिल रडार' : 'Cashflow & Cliff', icon: TrendingUp },
+        { id: 'financial-health', label: language === 'hi' ? 'बिजनेस हेल्थ' : 'Financial Health', icon: Activity },
+        { id: 'transactions', label: language === 'hi' ? 'लेन-देन (Transactions)' : 'Transactions', icon: Receipt },
       ],
     },
     {
-      groupTitle: 'WORKING CAPITAL',
+      groupTitle: language === 'hi' ? 'वर्किंग कैपिटल (पूंजी)' : 'WORKING CAPITAL',
+      items: [
+        {
+    {
+      groupTitle: language === 'hi' ? 'वर्किंग कैपिटल' : 'WORKING CAPITAL',
       items: [
         {
           id: 'payables',
-          label: 'Supplier Payables',
+          label: language === 'hi' ? 'सप्लायर बिल (Due)' : 'Supplier Payables',
           icon: Building2,
           badge: urgentPayablesCount > 0 ? '₹45K Cliff' : undefined,
           badgeVariant: 'amber' as const,
         },
-        { id: 'customers', label: 'Customers Directory', icon: Users },
+        {
+          id: 'customers',
+          label: language === 'hi' ? 'ग्राहक डायरेक्टरी' : 'Customers Directory',
+          icon: Users,
+        },
       ],
     },
     {
-      groupTitle: 'INTELLIGENCE',
+      groupTitle: language === 'hi' ? 'इंटेलिजेंस और एक्शन्स' : 'INTELLIGENCE & ACTIONS',
       items: [
         {
+          id: 'actions',
+          label: language === 'hi' ? '1-क्लिक समाधान (Actions)' : 'Action & Approval',
+          icon: CheckSquare,
+          badge: pendingActionsCount > 0 ? `${pendingActionsCount} Ready` : undefined,
+          badgeVariant: 'emerald' as const,
+        },
+        {
           id: 'signals',
-          label: 'Signal Radar',
+          label: language === 'hi' ? 'सिग्नल रडार (Alerts)' : 'Signal Radar',
           icon: Radio,
           badge: criticalSignalsCount > 0 ? `${criticalSignalsCount} Alert` : undefined,
           badgeVariant: 'rose' as const,
         },
         {
           id: 'opportunities',
-          label: 'Opportunity Center',
+          label: language === 'hi' ? 'पूंजी अवसर (Opportunities)' : 'Opportunity Center',
           icon: Zap,
           badge: `${opportunities.length} Open`,
           badgeVariant: 'indigo' as const,
         },
-        {
-          id: 'actions',
-          label: 'Action & Approval',
-          icon: CheckSquare,
-          badge: pendingActionsCount > 0 ? `${pendingActionsCount} Ready` : undefined,
-          badgeVariant: 'emerald' as const,
-        },
+        { id: 'paytm-ecosystem', label: language === 'hi' ? 'Paytm टेलीमेट्री हब' : 'Paytm Telemetry Hub', icon: QrCode },
       ],
     },
     {
-      groupTitle: 'DATA & ECOSYSTEM',
+      groupTitle: language === 'hi' ? 'सिस्टम और आर्किटेक्चर' : 'SYSTEM & ARCHITECTURE',
       items: [
-        { id: 'connections', label: 'Connections & Paytm', icon: Layers },
-        { id: 'ingestion', label: 'Ingestion & Quarantine', icon: Cpu },
-        { id: 'audit', label: 'Audit Trail', icon: Clock },
-      ],
-    },
-    {
-      groupTitle: 'SYSTEM & HELP',
-      items: [
-        { id: 'how-it-works', label: 'How MerchantMind Works', icon: HelpCircle },
-        { id: 'architecture', label: 'Enterprise Architecture', icon: Network },
-        { id: 'paytm-ecosystem', label: 'Paytm Ecosystem Hub', icon: QrCode },
-        { id: 'settings', label: 'Business Profile', icon: Settings },
+        { id: 'architecture', label: language === 'hi' ? 'सिस्टम आर्किटेक्चर' : 'Enterprise Architecture', icon: Network },
+        { id: 'how-it-works', label: language === 'hi' ? 'सिस्टम कैसे काम करता है' : 'How It Works', icon: HelpCircle },
+        { id: 'settings', label: language === 'hi' ? 'दुकान प्रोफाइल' : 'Business Profile', icon: Settings },
       ],
     },
   ];

@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Compass,
+  Languages,
+  MessageSquare,
   LayoutDashboard,
   Presentation,
   Play,
@@ -48,6 +50,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     actions,
     connections,
     setActiveAppTab,
+    language,
+    setLanguage,
+    openAssistant,
+    setIsBriefingOpen,
   } = useMerchant();
 
   const [isStatusOpen, setIsStatusOpen] = useState(false);
@@ -134,7 +140,38 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           </div>
 
           {/* Right Actions, Live Telemetry & Scenario Controller */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2">
+            {/* Language Switcher */}
+            <button
+              onClick={() => setLanguage(language === 'hi' ? 'en' : 'hi')}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100/90 text-indigo-800 text-xs font-semibold transition-all cursor-pointer shadow-2xs"
+              title="Toggle English / Hindi (Hinglish)"
+            >
+              <Languages className="w-3.5 h-3.5 text-indigo-600" />
+              <span className="font-medium">{language === 'hi' ? '🇮🇳 हिंदी' : '🇬🇧 EN'}</span>
+            </button>
+
+            {/* AI Vyapar Sahayak Direct Launcher */}
+            <button
+              onClick={() => openAssistant()}
+              className="flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-700 hover:to-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs hover:shadow-cyan-500/20 transition-all cursor-pointer"
+              title="Open Paytm Vyapar AI Sahayak (Voice & Chat)"
+            >
+              <span>🤖</span>
+              <span className="hidden sm:inline font-medium">{language === 'hi' ? 'AI सहायक' : 'AI Sahayak'}</span>
+              <span className="text-[9px] px-1 py-0.2 bg-white/20 rounded font-mono font-bold">🎙️</span>
+            </button>
+
+            {/* 8:00 AM WhatsApp Morning Briefing Modal */}
+            <button
+              onClick={() => setIsBriefingOpen(true)}
+              className="hidden md:flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-lg border border-emerald-200 text-xs font-semibold transition-colors cursor-pointer"
+              title="View 8:00 AM WhatsApp Daily Briefing & Audio Note"
+            >
+              <span>📱</span>
+              <span className="hidden lg:inline">WhatsApp</span>
+              <span className="text-[10px] text-emerald-700 font-mono">8:00 AM</span>
+            </button>
             {/* Live Telemetry Indicator & Status Popover */}
             <div className="relative" ref={statusRef}>
               <button

@@ -29,6 +29,9 @@ MerchantMind continuously monitors business telemetry, identifies impending liqu
 
 ## 🚀 Key Features
 
+- 🤖 **Paytm Vyapar AI Sahayak (Voice & Conversational Partner):** Persistent interactive assistant tailored for Bharat shopkeepers. Understands sales velocity, supplier bills, customer Udhaar, and dead stock in natural Hinglish/Hindi and English.
+- 🎙️ **Voice-First Interaction & Soundbox Audio Playback:** Web Speech API voice input allowing busy shopkeepers to ask questions hands-free, complete with signature Paytm Soundbox chime and voice synthesis.
+- 📱 **8:00 AM Proactive WhatsApp Morning Audio Briefing:** Daily 42-second audio summary and actionable cards delivered directly to the merchant's simulated WhatsApp feed before opening shutters.
 - 🎯 **Continuous Cashflow Radar:** Tracks rolling 14-day liquidity trajectories, operational burn, and runway without manual bookkeeping.
 - 🔍 **Zero-Hallucination Evidence Drawer:** 100% transparent audit lineage. Every recommendation links directly to verified source invoices, Khata aging ledgers, and exact formulas.
 - 🛡️ **Human-in-the-Loop Action Center:** 2-step confirmation guardrails prevent unintended communications. The merchant always retains complete authority.
@@ -69,6 +72,35 @@ $$\text{CONNECT} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{MONITOR
 - **Styling:** Tailwind CSS, Lucide Icons
 - **Architecture:** Service abstraction pattern (`IMerchantService` / `MockMerchantService`)
 - **Deployment:** Vercel (Edge SPA routing)
+
+---
+
+## 🎯 PS-02: Merchant Growth AI (Paytm) — 100% Compliance Matrix
+
+MerchantMind was engineered to directly address **PS-02 (Merchant Growth AI)** for small retail merchants:
+
+| PS-02 Requirement | Status | Implementation in MerchantMind |
+| :--- | :---: | :--- |
+| **Merchant-facing assistant over synthetic data** | **100% FULFILLED** | 100% synthetic telemetry for *Abhishek Mobile & Accessories* (Paytm QR, Soundbox, SBI feeds, Khata ledgers). |
+| **Plain-language insights: sales, slow periods, cash flow** | **100% FULFILLED** | Natural language explanations in both **Hinglish/Hindi** and **English** with zero financial jargon. |
+| **Specific recommended actions, not just charts** | **100% FULFILLED** | 1-Click WhatsApp Udhaar recovery paylinks (+₹3,700), 48-hr flash stock clearance (+₹7,800), and vendor extension. |
+| **Conversational interface for non-technical merchants** | **100% FULFILLED** | **Paytm Vyapar AI Sahayak:** Full interactive chat & voice console with quick shopkeeper prompt chips. |
+| **Bonus: Hindi & regional language support** | **100% FULFILLED** | Global **English ⟷ हिंदी/हिंग्लिश** toggle with colloquial shopkeeper terminology (*"Udhaar", "Bikri", "Munafa"*). |
+| **Bonus: Voice-first interaction** | **100% FULFILLED** | Web Speech API voice recognition + Web Audio Paytm Soundbox chime and speech synthesis playback. |
+| **Bonus: WhatsApp delivery** | **100% FULFILLED** | Simulated **8:00 AM WhatsApp Morning Audio Briefing** card with voice note player and customer paylink dispatch. |
+| **Bonus: Proactive alerts & settlement insights** | **100% FULFILLED** | Autonomous heuristic signals (`SIG-LIQ-CLIFF`, `SIG-REC-OVERDUE`) and T+0 / T+1 batch settlement reconciliation. |
+| **Constraint: No real data / non-regulated advice** | **100% PASSED** | Zero PII / real bank credentials; strictly operational liquidity improvement with zero loan/debt advice. |
+
+---
+
+## ⚡ 3-Minute Live Judging Pitch (Srijan 2k26)
+
+- **Minute 1 — The Crisis (Abhishek Mobile, Lucknow):**
+  > *"Sir, 82% micro-retailers suffer from working capital cliffs: cash is locked in customer Udhaar and slow stock while distributor bills fall due. Abhishek has ₹40,607 cash, but Sharma Telecom's bill is ₹45,000 on the 12th (-₹4,393 cliff)."*
+- **Minute 2 — The Conversational AI Sahayak & Proof:**
+  > *"Instead of confusing charts, Abhishek simply taps the mic in Paytm Vyapar AI Sahayak: 'Sharma Telecom ka bill kaise bharein?' The assistant explains the ₹4,393 shortfall with 100% verifiable math from invoice BILL-SUP-201 and customer aging ledgers."*
+- **Minute 3 — 1-Click WhatsApp Recovery & Turnaround:**
+  > *"With 1 click right inside the chat, Abhishek dispatches WhatsApp UPI paylinks with a 2% prompt settlement discount to Amit Verma and Neha Sharma. ₹3,700 is instantly unlocked, transforming the deficit into a safe +₹7,107 cushion!"*
 
 ---
 

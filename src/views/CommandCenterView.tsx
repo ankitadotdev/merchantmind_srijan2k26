@@ -17,6 +17,9 @@ import {
   ExternalLink,
   Layers,
   ArrowUpRight,
+  Mic,
+  MessageSquare,
+  Volume2,
 } from 'lucide-react';
 import { useMerchant } from '../context/MerchantContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
@@ -38,6 +41,9 @@ export const CommandCenterView: React.FC = () => {
     runIntelligenceScan,
     approveAction,
     actions,
+    openAssistant,
+    setIsBriefingOpen,
+    language,
   } = useMerchant();
 
   if (!financialHealth) return null;
@@ -95,6 +101,61 @@ export const CommandCenterView: React.FC = () => {
             <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
             <span>Scan Telemetry</span>
           </Button>
+        </div>
+      </div>
+
+      {/* AI SAHAYAK VOICE & CONVERSATION PROMPT HERO BAR */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-lg border border-indigo-900/60 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-600 to-indigo-600 flex items-center justify-center text-xl shadow-inner border border-white/20">
+              🤖
+            </div>
+            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 border-2 border-slate-900 animate-pulse"></span>
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-sm tracking-wide text-white">
+                Paytm Vyapar AI Sahayak
+              </span>
+              <Badge variant="cyan" size="sm" className="bg-cyan-900/80 text-cyan-200 border-none font-mono text-[9px]">
+                VOICE & CHAT ACTIVE
+              </Badge>
+            </div>
+            <p className="text-xs text-slate-300">
+              {language === 'hi'
+                ? 'Dukan ki bikri, Sharma Telecom ke bill aur udhaar ke bare me bol kar ya likh kar poochiye'
+                : "Ask anything about today's Paytm QR collection, Sharma Telecom bill, or Udhaar recovery"}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            onClick={() => openAssistant(language === 'hi' ? 'Sharma Telecom ka bill kab dena hai aur paise kitne kam hain?' : 'When is Sharma Telecom bill due and what is the cash deficit?')}
+            className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-semibold border border-white/15 transition-colors cursor-pointer"
+          >
+            🚨 {language === 'hi' ? 'Sharma Telecom Bill?' : 'Sharma Telecom Bill?'}
+          </button>
+          <button
+            onClick={() => openAssistant(language === 'hi' ? 'Amit Verma ka udhaar recover karne ke liye WhatsApp link bhejo' : 'How do we recover overdue Udhaar from Amit Verma?')}
+            className="px-3 py-1.5 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/90 text-emerald-200 text-xs font-semibold border border-emerald-800/60 transition-colors cursor-pointer"
+          >
+            💬 {language === 'hi' ? 'Udhaar WhatsApp Link' : 'Udhaar Paylinks'}
+          </button>
+          <button
+            onClick={() => setIsBriefingOpen(true)}
+            className="px-3 py-1.5 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/90 text-cyan-200 text-xs font-semibold border border-cyan-800/60 transition-colors cursor-pointer"
+          >
+            📱 {language === 'hi' ? 'Morning Briefing' : 'Morning Briefing'}
+          </button>
+          <button
+            onClick={() => openAssistant()}
+            className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white text-xs font-bold shadow-md transition-all cursor-pointer flex items-center gap-1.5"
+          >
+            <Mic className="w-3.5 h-3.5" />
+            <span>{language === 'hi' ? 'Bol kar poochiye 🎙️' : 'Talk with AI 🎙️'}</span>
+          </button>
         </div>
       </div>
 
