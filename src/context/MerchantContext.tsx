@@ -3,9 +3,7 @@ import type {
   MerchantProfile,
   FinancialHealthMetrics,
   CashflowDatapoint,
-  ReceivableRecord,
   PayableRecord,
-  InventoryItem,
   CustomerProfile,
   BusinessSignal,
   Opportunity,
@@ -24,9 +22,7 @@ interface MerchantContextValue {
   profile: MerchantProfile | null;
   financialHealth: FinancialHealthMetrics | null;
   cashflow: CashflowDatapoint[];
-  receivables: ReceivableRecord[];
   payables: PayableRecord[];
-  inventory: InventoryItem[];
   customers: CustomerProfile[];
   signals: BusinessSignal[];
   opportunities: Opportunity[];
@@ -54,7 +50,6 @@ interface MerchantContextValue {
   // Interactive Simulation Handlers
   approveAction: (actionId: string) => Promise<void>;
   executeActionSimulation: (actionId: string) => Promise<void>;
-  sendKhataReminder: (receivableId: string) => Promise<{ success: boolean; message: string }>;
   triggerDataSync: (connectionId: string) => Promise<void>;
   runIntelligenceScan: () => Promise<{ newSignals: number; newOpportunities: number }>;
   switchScenario: (scenario: BusinessScenarioId) => Promise<void>;
@@ -83,9 +78,7 @@ export const MerchantProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [profile, setProfile] = useState<MerchantProfile | null>(null);
   const [financialHealth, setFinancialHealth] = useState<FinancialHealthMetrics | null>(null);
   const [cashflow, setCashflow] = useState<CashflowDatapoint[]>([]);
-  const [receivables, setReceivables] = useState<ReceivableRecord[]>([]);
   const [payables, setPayables] = useState<PayableRecord[]>([]);
-  const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [customers, setCustomers] = useState<CustomerProfile[]>([]);
   const [signals, setSignals] = useState<BusinessSignal[]>([]);
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
@@ -134,9 +127,7 @@ export const MerchantProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         p,
         fh,
         cf,
-        rec,
         pay,
-        inv,
         cust,
         sig,
         opp,
@@ -150,9 +141,7 @@ export const MerchantProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         merchantServiceInstance.getMerchantProfile(),
         merchantServiceInstance.getFinancialHealth(),
         merchantServiceInstance.getCashflow(),
-        merchantServiceInstance.getReceivables(),
         merchantServiceInstance.getPayables(),
-        merchantServiceInstance.getInventory(),
         merchantServiceInstance.getCustomers(),
         merchantServiceInstance.getSignals(),
         merchantServiceInstance.getOpportunities(),
@@ -167,9 +156,7 @@ export const MerchantProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setProfile(p);
       setFinancialHealth(fh);
       setCashflow(cf);
-      setReceivables(rec);
       setPayables(pay);
-      setInventory(inv);
       setCustomers(cust);
       setSignals(sig);
       setOpportunities(opp);
@@ -210,12 +197,6 @@ export const MerchantProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     await refreshData();
   };
 
-  const sendKhataReminder = async (receivableId: string) => {
-    const res = await merchantServiceInstance.sendKhataReminder(receivableId);
-    await refreshData();
-    return res;
-  };
-
   const triggerDataSync = async (connectionId: string) => {
     await merchantServiceInstance.triggerDataSync(connectionId);
     await refreshData();
@@ -247,9 +228,7 @@ export const MerchantProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         profile,
         financialHealth,
         cashflow,
-        receivables,
         payables,
-        inventory,
         customers,
         signals,
         opportunities,
@@ -271,7 +250,6 @@ export const MerchantProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         closeEvidenceDrawer,
         approveAction,
         executeActionSimulation,
-        sendKhataReminder,
         triggerDataSync,
         runIntelligenceScan,
         switchScenario,

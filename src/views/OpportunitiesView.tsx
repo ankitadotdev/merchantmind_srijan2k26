@@ -73,7 +73,7 @@ export const OpportunitiesView: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-mono uppercase text-slate-400">Total Financial Stake:</span>
             <span className="text-xs font-mono font-bold text-amber-300 bg-amber-950/80 px-2.5 py-0.5 rounded border border-amber-700/60">
-              ₹99,967 Total Opportunity Exposure
+              ₹56,200 Identified Opportunity Exposure
             </span>
           </div>
         </div>
@@ -99,12 +99,12 @@ export const OpportunitiesView: React.FC = () => {
             <span className="text-[11px] text-slate-300 mt-0.5 block">Current funds: ₹40,607 (-₹4.3K gap)</span>
           </div>
           <div className="p-2.5 bg-slate-800/80 rounded-xl border border-slate-700/80">
-            <span className="text-cyan-400 block font-semibold text-[11px]">3. Overdue Khata</span>
-            <span className="text-[11px] text-slate-300 mt-0.5 block">₹3,700 trapped in 34d+ ledgers</span>
+            <span className="text-cyan-400 block font-semibold text-[11px]">3. Tranche Restructuring</span>
+            <span className="text-[11px] text-slate-300 mt-0.5 block">₹20,000 deferral creates safe buffer</span>
           </div>
           <div className="p-2.5 bg-slate-800/80 rounded-xl border border-slate-700/80">
-            <span className="text-emerald-400 block font-semibold text-[11px]">4. Stagnant Stock</span>
-            <span className="text-[11px] text-slate-300 mt-0.5 block">₹10,660 locked in idle accessories</span>
+            <span className="text-emerald-400 block font-semibold text-[11px]">4. Distributor Rebate</span>
+            <span className="text-[11px] text-slate-300 mt-0.5 block">₹11,200 eligible volume credit</span>
           </div>
         </div>
       </div>
@@ -116,8 +116,7 @@ export const OpportunitiesView: React.FC = () => {
           { id: 'CRITICAL', label: 'Critical' },
           { id: 'HIGH', label: 'High Priority' },
           { id: 'SUPPLIER_PAYMENT', label: 'Supplier Cliffs' },
-          { id: 'OVERDUE_RECEIVABLES', label: 'Khata Delays' },
-          { id: 'DEAD_STOCK', label: 'Dead Stock' },
+          { id: 'PRICING_OPTIMIZATION', label: 'Rebates & Pricing' },
         ].map((tab) => (
           <button
             key={tab.id}
