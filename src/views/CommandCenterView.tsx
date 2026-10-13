@@ -11,8 +11,8 @@ import {
   RefreshCw,
   Wallet,
   Receipt,
-  Package,
-  BookOpen,
+  Users,
+  CreditCard,
   Radio,
   ExternalLink,
   Layers,
@@ -32,9 +32,7 @@ export const CommandCenterView: React.FC = () => {
     financialHealth,
     opportunities,
     signals,
-    receivables,
     payables,
-    inventory,
     openEvidenceDrawer,
     setActiveAppTab,
     runIntelligenceScan,
@@ -119,7 +117,7 @@ export const CommandCenterView: React.FC = () => {
                   Supplier Payment Due in 5 Days
                 </Badge>
                 <span className="text-[11px] font-mono text-slate-600 font-bold bg-white px-2 py-0.5 rounded border border-slate-200">
-                  Financial Stake: ₹99,967 total identified exposure
+                  Financial Stake: ₹45,000 distributor commitment
                 </span>
               </div>
               <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1.5">
@@ -132,8 +130,8 @@ export const CommandCenterView: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-700 pt-1 font-medium">
                   <span>• Supplier payment due in 5 days (₹45,000)</span>
                   <span>• Current operating cash is insufficient (₹40,607)</span>
-                  <span>• ₹3,700 trapped in overdue Khata</span>
-                  <span>• ₹10,660 locked in stagnant inventory</span>
+                  <span>• Payment split deferral requested (+₹20,000 liquidity buffer)</span>
+                  <span>• Distributor volume rebate claimable (+₹11,200)</span>
                 </div>
               </div>
             </div>
@@ -155,7 +153,7 @@ export const CommandCenterView: React.FC = () => {
               onClick={() => setActiveAppTab('opportunities')}
               className="bg-rose-600 hover:bg-rose-700 text-xs font-semibold shadow-xs h-9"
             >
-              <span>Review Recovery Path (+₹11.5K)</span>
+              <span>Review Recovery Path (+₹20,000)</span>
               <ArrowRight className="w-3.5 h-3.5 ml-1" />
             </Button>
           </div>
@@ -192,18 +190,18 @@ export const CommandCenterView: React.FC = () => {
 
           {/* 4. Recommended Recovery */}
           <div className="p-3.5 bg-emerald-50/90 rounded-xl border border-emerald-300 shadow-2xs">
-            <span className="text-[10px] text-emerald-800 font-bold block uppercase">4. Recoverable Value</span>
+            <span className="text-[10px] text-emerald-800 font-bold block uppercase">4. Deferred / Relief Value</span>
             <span className="text-lg font-extrabold text-emerald-700 font-mono block mt-0.5">
-              +{formatINR(11500)}
+              +{formatINR(20000)}
             </span>
-            <span className="text-[10px] text-emerald-800 font-sans font-medium block mt-0.5">₹3.7K Khata + ₹7.8K Stock</span>
+            <span className="text-[10px] text-emerald-800 font-sans font-medium block mt-0.5">7-Day Supplier Tranche Split</span>
           </div>
 
           {/* 5. Post-Recovery Cushion */}
           <div className="p-3.5 bg-slate-900 text-white rounded-xl border border-slate-800 shadow-2xs col-span-2 sm:col-span-1">
             <span className="text-[10px] text-emerald-400 font-bold block uppercase">5. Projected Position</span>
             <span className="text-lg font-extrabold text-emerald-400 font-mono block mt-0.5">
-              +{formatINR(7107)}
+              +{formatINR(15607)}
             </span>
             <span className="text-[10px] text-slate-300 font-sans block mt-0.5">Safe Working Cushion</span>
           </div>
@@ -256,35 +254,35 @@ export const CommandCenterView: React.FC = () => {
           </span>
         </Card>
 
-        {/* C. Money At Risk - Overdue Khata */}
-        <Card className="p-4 border-rose-200 bg-rose-50/20">
-          <span className="text-xs font-medium text-rose-800 block">Overdue Khata (&gt;30d)</span>
+        {/* C. Monthly Revenue Inflow */}
+        <Card className="p-4 border-indigo-200 bg-indigo-50/20">
+          <span className="text-xs font-medium text-indigo-900 block">Monthly Revenue Inflow</span>
           <div className="flex items-baseline justify-between mt-1">
-            <span className="text-xl font-bold font-mono text-rose-700">
-              {formatINR(financialHealth.overdueReceivables)}
+            <span className="text-xl font-bold font-mono text-indigo-700">
+              {formatINR(financialHealth.totalRevenueMonthly)}
             </span>
-            <Badge variant="rose" size="sm">
-              2 Accounts
+            <Badge variant="indigo" size="sm">
+              Paytm QR & Card
             </Badge>
           </div>
-          <span className="text-[11px] text-rose-600 mt-1 block">
-            Amit Verma & Neha Sharma
+          <span className="text-[11px] text-indigo-600 mt-1 block">
+            Avg Outflow: ~{formatINR(Math.round(financialHealth.totalExpensesMonthly / 30))}/day
           </span>
         </Card>
 
-        {/* D. Money At Risk - Dead Stock */}
-        <Card className="p-4 border-amber-200 bg-amber-50/20">
-          <span className="text-xs font-medium text-amber-800 block">Dead Stock Capital Locked</span>
+        {/* D. Upcoming Supplier Payables */}
+        <Card className="p-4 border-rose-200 bg-rose-50/20">
+          <span className="text-xs font-medium text-rose-800 block">Urgent Supplier Payables (7d)</span>
           <div className="flex items-baseline justify-between mt-1">
-            <span className="text-xl font-bold font-mono text-amber-900">
-              {formatINR(financialHealth.deadStockCapitalLocked)}
+            <span className="text-xl font-bold font-mono text-rose-700">
+              {formatINR(financialHealth.urgentPayablesNext7Days)}
             </span>
-            <Badge variant="amber" size="sm">
-              47+ Days Stagnant
+            <Badge variant="rose" size="sm">
+              Due Oct 9
             </Badge>
           </div>
-          <span className="text-[11px] text-amber-700 mt-1 block">
-            iPhone 11 & OnePlus 7 stock
+          <span className="text-[11px] text-rose-600 mt-1 block">
+            Sharma Telecom Wholesale
           </span>
         </Card>
       </div>
@@ -401,18 +399,6 @@ export const CommandCenterView: React.FC = () => {
             </button>
 
             <button
-              onClick={() => setActiveAppTab('receivables')}
-              className="p-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-left transition-colors cursor-pointer"
-            >
-              <div className="flex items-center justify-between">
-                <BookOpen className="w-4 h-4 text-emerald-600" />
-                <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
-              </div>
-              <span className="text-xs font-bold text-slate-900 block mt-2">Customer Khata</span>
-              <span className="text-[10px] text-slate-500">5 active ledgers</span>
-            </button>
-
-            <button
               onClick={() => setActiveAppTab('payables')}
               className="p-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-left transition-colors cursor-pointer"
             >
@@ -425,15 +411,27 @@ export const CommandCenterView: React.FC = () => {
             </button>
 
             <button
-              onClick={() => setActiveAppTab('inventory')}
+              onClick={() => setActiveAppTab('transactions')}
               className="p-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-left transition-colors cursor-pointer"
             >
               <div className="flex items-center justify-between">
-                <Package className="w-4 h-4 text-amber-600" />
+                <CreditCard className="w-4 h-4 text-emerald-600" />
                 <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
               </div>
-              <span className="text-xs font-bold text-slate-900 block mt-2">Inventory Stock</span>
-              <span className="text-[10px] text-slate-500">Dead stock alerts</span>
+              <span className="text-xs font-bold text-slate-900 block mt-2">Transactions</span>
+              <span className="text-[10px] text-slate-500">Paytm Soundbox & QR</span>
+            </button>
+
+            <button
+              onClick={() => setActiveAppTab('customers')}
+              className="p-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-left transition-colors cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <Users className="w-4 h-4 text-cyan-600" />
+                <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
+              </div>
+              <span className="text-xs font-bold text-slate-900 block mt-2">Customer Profiles</span>
+              <span className="text-[10px] text-slate-500">RFM & repeat buyers</span>
             </button>
           </div>
         </div>

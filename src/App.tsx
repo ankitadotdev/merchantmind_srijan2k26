@@ -9,9 +9,7 @@ import { CommandCenterView } from './views/CommandCenterView';
 import { FinancialHealthView } from './views/FinancialHealthView';
 import { CashflowView } from './views/CashflowView';
 import { TransactionsView } from './views/TransactionsView';
-import { KhataReceivablesView } from './views/KhataReceivablesView';
 import { SupplierPayablesView } from './views/SupplierPayablesView';
-import { InventoryView } from './views/InventoryView';
 import { CustomersView } from './views/CustomersView';
 import { SignalsView } from './views/SignalsView';
 import { OpportunitiesView } from './views/OpportunitiesView';
@@ -57,12 +55,8 @@ const AppContent: React.FC = () => {
         return <CashflowView />;
       case 'transactions':
         return <TransactionsView />;
-      case 'khata':
-        return <KhataReceivablesView />;
       case 'payables':
         return <SupplierPayablesView />;
-      case 'inventory':
-        return <InventoryView />;
       case 'customers':
         return <CustomersView />;
       case 'signals':

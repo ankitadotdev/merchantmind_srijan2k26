@@ -4,9 +4,7 @@ import {
   Activity,
   TrendingUp,
   Receipt,
-  BookOpen,
   Building2,
-  Package,
   Users,
   Radio,
   Zap,
@@ -35,17 +33,13 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
   const {
     activeAppTab,
     setActiveAppTab,
-    receivables,
     payables,
-    inventory,
     signals,
     opportunities,
     actions,
   } = useMerchant();
 
-  const overdueKhataCount = receivables.filter((r) => r.status === 'OVERDUE').length;
   const urgentPayablesCount = payables.filter((p) => p.isCliff || p.priority === 'URGENT').length;
-  const deadStockCount = inventory.filter((i) => i.status === 'DEAD_STOCK').length;
   const criticalSignalsCount = signals.filter((s) => s.severity === 'CRITICAL').length;
   const pendingActionsCount = actions.filter((a) => a.status === 'AWAITING_APPROVAL' || a.status === 'DRAFT').length;
 
@@ -68,27 +62,13 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
       groupTitle: 'WORKING CAPITAL',
       items: [
         {
-          id: 'khata',
-          label: 'Khata / Receivables',
-          icon: BookOpen,
-          badge: overdueKhataCount > 0 ? `${overdueKhataCount} Overdue` : undefined,
-          badgeVariant: 'rose' as const,
-        },
-        {
           id: 'payables',
           label: 'Supplier Payables',
           icon: Building2,
           badge: urgentPayablesCount > 0 ? '₹45K Cliff' : undefined,
           badgeVariant: 'amber' as const,
         },
-        {
-          id: 'inventory',
-          label: 'Inventory Velocity',
-          icon: Package,
-          badge: deadStockCount > 0 ? `${deadStockCount} Dead` : undefined,
-          badgeVariant: 'slate' as const,
-        },
-        { id: 'customers', label: 'Customers & Credit', icon: Users },
+        { id: 'customers', label: 'Customers Directory', icon: Users },
       ],
     },
     {
