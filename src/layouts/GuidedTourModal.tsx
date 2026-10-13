@@ -220,9 +220,9 @@ export const GuidedTourModal: React.FC = () => {
           <div className="p-2.5 bg-slate-900 text-slate-100 rounded-xl space-y-1 text-[11px] font-mono">
             <div className="text-indigo-300 font-sans font-semibold">Canonical Source Records:</div>
             <ul className="space-y-0.5 text-slate-300">
-              <li>• <strong>BILL-SUP-201:</strong> ₹45,000 Sharma Telecom distributor invoice (Due Oct 9).</li>
-              <li>• <strong>SBI Bank Feed:</strong> ₹40,607 available operating cash.</li>
-              <li>• <strong>Distributor Agreement:</strong> Eligible for 7-day payment tranche split and quarterly volume rebate.</li>
+              <li>• <strong>BILL-SUP-201:</strong> ₹45,000 Sharma Telecom distributor invoice.</li>
+              <li>• <strong>INV-REC-101/103:</strong> ₹3,700 overdue customer Khata (Amit & Neha).</li>
+              <li>• <strong>SKUs (IP11, Pouch, OTG):</strong> ₹10,660 locked in 47+ day stagnant inventory.</li>
             </ul>
           </div>
           <p className="text-slate-600 text-[11px]">
@@ -238,38 +238,38 @@ export const GuidedTourModal: React.FC = () => {
       },
     },
     {
-      title: '6. Recommendation: Supplier Restructuring',
+      title: '6. Recommendation: Dual Capital Levers',
       badge: 'Opportunity Engine',
       icon: Zap,
       targetId: 'tour-opportunities-top',
       targetName: 'Ranked Opportunities List',
       preferredPlacement: 'bottom',
-      keyMetricLabel: 'Liquidity Relief Secured',
-      keyMetricValue: '+₹20,000 Buffer in 48h',
+      keyMetricLabel: 'Combined Capital Liberated',
+      keyMetricValue: '+₹11,500 Recovery in 48h',
       metricVariant: 'emerald',
       content: (
         <div className="space-y-2 text-xs text-slate-700">
           <p>
-            MerchantMind formulates a concrete, supplier-friendly restructuring lever:
+            MerchantMind formulates two concrete, high-velocity operational levers:
           </p>
           <div className="space-y-1.5">
             <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg flex justify-between items-center text-xs">
               <div>
-                <strong className="text-slate-900 block">1. 7-Day Tranche Split:</strong>
-                <span className="text-[10px] text-slate-500">Pay ₹25,000 on Oct 9, defer ₹20,000 to Oct 16</span>
+                <strong className="text-slate-900 block">1. Overdue Khata Paylinks:</strong>
+                <span className="text-[10px] text-slate-500">Amit Verma (₹2.2K) + Neha Sharma (₹1.5K)</span>
               </div>
-              <span className="font-mono font-bold text-emerald-700">+₹20,000 Relief</span>
+              <span className="font-mono font-bold text-emerald-700">+₹3,700</span>
             </div>
             <div className="p-2 bg-slate-50 border border-slate-200 rounded-lg flex justify-between items-center text-xs">
               <div>
-                <strong className="text-slate-900 block">2. Claim Distributor Rebate:</strong>
-                <span className="text-[10px] text-slate-500">Tier-2 volume incentive claim</span>
+                <strong className="text-slate-900 block">2. Dead Stock Clearance:</strong>
+                <span className="text-[10px] text-slate-500">iPhone 11 & OnePlus 7 cases weekend bundle</span>
               </div>
-              <span className="font-mono font-bold text-emerald-700">+₹11,200</span>
+              <span className="font-mono font-bold text-emerald-700">+₹7,800</span>
             </div>
           </div>
           <p className="text-emerald-800 font-semibold text-[11px]">
-            Immediate Relief: <strong>+₹20,000</strong>—eliminates the -₹4,393 deficit and creates a safe buffer!
+            Total Recovery: <strong>+₹11,500</strong>—more than enough to eliminate the -₹4,393 deficit!
           </p>
         </div>
       ),
@@ -297,11 +297,11 @@ export const GuidedTourModal: React.FC = () => {
           </p>
           <div className="p-2.5 bg-indigo-50/70 border border-indigo-200 rounded-xl space-y-1 text-xs">
             <div className="flex justify-between items-center font-bold text-slate-900 text-xs">
-              <span>Action: Restructure Sharma Telecom Payment</span>
+              <span>Action: WhatsApp UPI Collection Paylink</span>
               <Badge variant="indigo" size="sm">Low Friction</Badge>
             </div>
             <p className="text-slate-600 text-[11px] leading-relaxed">
-              Dispatches formal payment split proposal with confirmed settlement dates to Sharma Telecom Accounts.
+              Dispatches courteous WhatsApp reminders with dynamic 1-click Paytm UPI links directly to Amit and Neha.
             </p>
           </div>
           <p className="text-slate-600 text-[11px]">
@@ -324,28 +324,28 @@ export const GuidedTourModal: React.FC = () => {
       targetName: 'Closed-Loop Telemetry Verification Panel',
       preferredPlacement: 'top',
       keyMetricLabel: 'Net Transformation',
-      keyMetricValue: '-₹4,393 Deficit → +₹15,607 Surplus',
+      keyMetricValue: '-₹4,393 Deficit → +₹7,107 Surplus',
       metricVariant: 'emerald',
       content: (
         <div className="space-y-2 text-xs text-slate-700">
           <p>
-            Closed-loop telemetry measures downstream accounts and bank balance updates:
+            Closed-loop telemetry measures downstream bank and inventory updates:
           </p>
           <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1.5 text-xs">
             <span className="font-bold text-emerald-950 block text-[11px] uppercase tracking-wider">
               Financial Transformation Measured:
             </span>
             <div className="flex justify-between font-mono font-semibold text-xs">
-              <span className="text-slate-700">Urgent Obligation Reduced (Tranche Deferral):</span>
-              <span className="text-emerald-700">+₹20,000</span>
+              <span className="text-slate-700">Cash Recovered (Khata + Stock):</span>
+              <span className="text-emerald-700">+₹11,500</span>
             </div>
             <div className="flex justify-between font-mono font-semibold text-xs">
-              <span className="text-slate-700">Upfront Tranche Paid:</span>
-              <span className="text-rose-700">-₹25,000</span>
+              <span className="text-slate-700">Sharma Telecom Bill Settled:</span>
+              <span className="text-rose-700">-₹45,000</span>
             </div>
             <div className="flex justify-between pt-1 border-t border-emerald-200 font-mono font-bold text-emerald-950 text-xs">
-              <span>Resulting Operating Cushion:</span>
-              <span>+₹15,607 Safe Surplus!</span>
+              <span>Resulting Operating Balance:</span>
+              <span>+₹7,107 Safe Surplus!</span>
             </div>
           </div>
           <p className="text-slate-600 text-[11px]">

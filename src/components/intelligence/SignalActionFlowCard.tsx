@@ -68,7 +68,7 @@ export const SignalActionFlowCard: React.FC<SignalActionFlowCardProps> = ({
       num: 3,
       label: 'OPPORTUNITY',
       title: 'Bridge Working Capital',
-      desc: 'Structure supplier tranche terms and claim distributor rebate to secure liquidity',
+      desc: 'Identify trapped internal liquidity before turning to high-interest merchant debt',
       icon: Lightbulb,
       badge: 'Synthesized Insight',
       color: 'amber',
@@ -76,8 +76,8 @@ export const SignalActionFlowCard: React.FC<SignalActionFlowCardProps> = ({
     {
       num: 4,
       label: 'RECOMMENDATION',
-      title: 'Payment Split Deferral',
-      desc: 'Pay ₹25,000 upfront, defer ₹20,000 for 7 days (+₹20,000 immediate liquidity relief)',
+      title: 'Dual Recovery Package',
+      desc: 'Recover ₹3,700 overdue Khata + liquidate ₹7,800 dead stock (+₹11,500 total)',
       icon: Sparkles,
       badge: 'Quantified Plan',
       color: 'indigo',
@@ -94,8 +94,8 @@ export const SignalActionFlowCard: React.FC<SignalActionFlowCardProps> = ({
     {
       num: 6,
       label: 'ACTION',
-      title: 'Dispatched Restructure',
-      desc: 'Supplier payment schedule proposal communicated with confirmed settlement dates',
+      title: 'Multi-Channel Execution',
+      desc: 'WhatsApp UPI payment reminders dispatched + in-store clearance discount standee',
       icon: Send,
       badge: 'Automated Dispatch',
       color: 'indigo',
@@ -103,8 +103,8 @@ export const SignalActionFlowCard: React.FC<SignalActionFlowCardProps> = ({
     {
       num: 7,
       label: 'MEASURED RESULT',
-      title: '+₹15,607 Protected',
-      desc: 'Cash position transformed from -₹4,393 deficit to +₹15,607 safe working cushion',
+      title: '+₹11,500 Recovered',
+      desc: 'Cash position transformed from -₹4,393 deficit to +₹7,107 safe working cushion',
       icon: TrendingUp,
       badge: 'Closed-Loop Verification',
       color: 'emerald',
@@ -152,7 +152,7 @@ export const SignalActionFlowCard: React.FC<SignalActionFlowCardProps> = ({
       {/* Process Chain */}
       <div className="p-4 sm:p-6">
         <div className="grid grid-cols-1 md:grid-cols-7 gap-3 relative">
-          {steps.map((st) => {
+          {steps.map((st, i) => {
             const Icon = st.icon;
 
             return (
@@ -214,9 +214,11 @@ export const SignalActionFlowCard: React.FC<SignalActionFlowCardProps> = ({
             <span className="font-semibold text-slate-900">End-to-End Mathematical Resolution:</span>
             <span className="text-rose-700 font-mono font-bold">-₹4,393 Deficit</span>
             <span className="text-slate-400 font-bold">&rarr;</span>
-            <span className="text-indigo-700 font-mono font-bold">+₹20,000 Deferral</span>
+            <span className="text-indigo-700 font-mono font-bold">+₹3,700 Khata</span>
+            <span className="text-slate-400 font-bold">+</span>
+            <span className="text-indigo-700 font-mono font-bold">+₹7,800 Clearance</span>
             <span className="text-slate-400 font-bold">=</span>
-            <span className="text-emerald-700 font-mono font-bold">+₹15,607 Protected Cushion</span>
+            <span className="text-emerald-700 font-mono font-bold">+₹7,107 Protected Cushion</span>
           </div>
 
           <div className="flex items-center gap-1.5 text-[11px] text-slate-500 font-medium">
