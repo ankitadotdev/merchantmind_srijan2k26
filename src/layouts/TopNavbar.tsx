@@ -69,35 +69,38 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-2 sm:gap-4">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-16 gap-1.5 sm:gap-3">
           {/* Logo & Brand */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0 shrink">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="inline-flex items-center justify-center w-8 h-8 -ml-1 text-slate-500 hover:text-slate-800 lg:hidden rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+              className={`inline-flex items-center justify-center w-8 h-8 -ml-1 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer shrink-0 ${
+                activeWorld === 'showcase' ? 'lg:hidden' : 'md:hidden'
+              }`}
               aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
 
             <div
               onClick={() => setActiveWorld('showcase')}
-              className="flex items-center gap-2.5 cursor-pointer group"
+              className="flex items-center gap-2 cursor-pointer group min-w-0 select-none"
             >
-              <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-xs group-hover:bg-indigo-700 transition-colors shrink-0">
-                <Compass className="w-5 h-5" />
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-xs group-hover:bg-indigo-700 transition-colors shrink-0">
+                <Compass className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
               </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-slate-900 tracking-tight text-base sm:text-lg">
+              <div className="min-w-0">
+                <div className="flex items-center gap-1 sm:gap-1.5">
+                  <span className="font-bold text-slate-900 tracking-tight text-sm sm:text-base truncate">
                     MerchantMind
                   </span>
-                  <span className="text-[10px] font-semibold uppercase tracking-wider bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-200 shrink-0">
+                  <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider bg-indigo-50 text-indigo-700 px-1 sm:px-1.5 py-0.2 rounded border border-indigo-200 shrink-0">
                     B2B OS
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400 font-medium leading-none hidden xl:block">
+                <p className="text-[10px] text-slate-400 font-medium leading-none hidden xl:block truncate">
                   Fintech Intelligence & Decision Platform
                 </p>
               </div>
@@ -105,85 +108,86 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           </div>
 
           {/* Center: Dual-World Experience Switcher */}
-          <div className="hidden lg:flex items-center p-1 bg-slate-100/90 rounded-xl border border-slate-200/80 shadow-2xs shrink-0">
+          <div className="hidden lg:flex items-center p-0.5 bg-slate-100/90 rounded-xl border border-slate-200/80 shadow-2xs shrink-0">
             <button
               onClick={() => setActiveWorld('showcase')}
-              className={`h-8 flex items-center gap-2 px-3.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`h-7.5 flex items-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeWorld === 'showcase'
                   ? 'bg-white text-indigo-700 shadow-xs border border-slate-200/60'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
               }`}
             >
               <Presentation className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-              <span>Public Showcase & Architecture</span>
+              <span>Public Showcase</span>
             </button>
             <button
               onClick={() => setActiveWorld('app')}
-              className={`h-8 flex items-center gap-2 px-3.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`h-7.5 flex items-center gap-1.5 px-3 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeWorld === 'app'
                   ? 'bg-white text-indigo-700 shadow-xs border border-slate-200/60'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
               }`}
             >
               <LayoutDashboard className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-              <span>Merchant Command Center</span>
+              <span>Command Center</span>
             </button>
           </div>
 
           {/* Right Actions, Live Telemetry & Scenario Controller */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 shrink-0">
             {/* Language Switcher */}
             <button
               onClick={() => setLanguage(language === 'hi' ? 'en' : 'hi')}
-              className="h-8 inline-flex items-center gap-1.5 px-2.5 rounded-lg border border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-800 text-xs font-semibold transition-colors cursor-pointer shadow-2xs shrink-0"
+              className="h-7.5 sm:h-8 inline-flex items-center gap-1 px-1.5 sm:px-2.5 rounded-lg border border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-800 text-xs font-semibold transition-colors cursor-pointer shadow-2xs shrink-0"
               title="Toggle English / Hindi (Hinglish)"
             >
               <Languages className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-              <span className="font-medium">{language === 'hi' ? '🇮🇳 हिंदी' : '🇬🇧 EN'}</span>
+              <span className="font-medium hidden sm:inline">{language === 'hi' ? '🇮🇳 हिंदी' : '🇬🇧 EN'}</span>
+              <span className="font-medium sm:hidden text-[11px]">{language === 'hi' ? 'HI' : 'EN'}</span>
             </button>
 
             {/* AI Vyapar Sahayak Direct Launcher */}
             <button
               onClick={() => openAssistant()}
-              className="h-8 inline-flex items-center gap-1.5 px-2.5 sm:px-3 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-700 hover:to-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs hover:shadow-cyan-500/20 transition-all cursor-pointer shrink-0"
+              className="h-7.5 sm:h-8 inline-flex items-center gap-1 px-2 sm:px-2.5 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-700 hover:to-indigo-700 text-white rounded-lg text-xs font-semibold shadow-xs hover:shadow-cyan-500/20 transition-all cursor-pointer shrink-0"
               title="Open Paytm Vyapar AI Sahayak (Voice & Chat)"
             >
-              <span className="shrink-0">🤖</span>
+              <span className="shrink-0 text-xs">🤖</span>
               <span className="hidden sm:inline font-medium">{language === 'hi' ? 'AI सहायक' : 'AI Sahayak'}</span>
-              <span className="text-[9px] px-1 py-0.5 bg-white/20 rounded font-mono font-bold leading-none shrink-0">🎙️</span>
+              <span className="hidden md:inline text-[9px] px-1 py-0.2 bg-white/20 rounded font-mono font-bold leading-none shrink-0">🎙️</span>
             </button>
 
-            {/* 8:00 AM WhatsApp Morning Briefing Modal */}
+            {/* 8:00 AM WhatsApp Morning Briefing Modal (Tablet / Desktop) */}
             <button
               onClick={() => setIsBriefingOpen(true)}
-              className="hidden md:inline-flex items-center gap-1.5 h-8 px-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-lg border border-emerald-200 text-xs font-semibold transition-colors cursor-pointer shrink-0"
+              className="hidden md:inline-flex items-center gap-1.5 h-7.5 sm:h-8 px-2 sm:px-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-lg border border-emerald-200 text-xs font-semibold transition-colors cursor-pointer shrink-0"
               title="View 8:00 AM WhatsApp Daily Briefing & Audio Note"
             >
               <span className="shrink-0">📱</span>
               <span className="hidden lg:inline">WhatsApp</span>
-              <span className="text-[10px] text-emerald-700 font-mono font-semibold">8:00 AM</span>
+              <span className="text-[10px] text-emerald-700 font-mono font-semibold">8 AM</span>
             </button>
 
             {/* Live Telemetry Indicator & Status Popover */}
             <div className="relative" ref={statusRef}>
               <button
                 onClick={() => setIsStatusOpen(!isStatusOpen)}
-                className="h-8 inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 bg-emerald-50 hover:bg-emerald-100/80 text-emerald-800 rounded-lg border border-emerald-200 text-xs font-medium transition-colors cursor-pointer shrink-0"
+                className="h-7.5 sm:h-8 inline-flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2.5 bg-emerald-50 hover:bg-emerald-100/80 text-emerald-800 rounded-lg border border-emerald-200 text-xs font-medium transition-colors cursor-pointer shrink-0"
                 title="Click to view live system telemetry status"
               >
                 <span className="flex h-2 w-2 relative shrink-0">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                <span className="hidden sm:inline font-mono text-[11px] font-semibold">LIVE</span>
-                <span className="text-slate-400 hidden sm:inline">•</span>
-                <span className="text-emerald-700 text-xs font-semibold whitespace-nowrap">6/6 Synced</span>
-                <ChevronDown className="w-3 h-3 text-emerald-600 shrink-0" />
+                <span className="hidden md:inline font-mono text-[11px] font-semibold">LIVE</span>
+                <span className="text-slate-400 hidden md:inline">•</span>
+                <span className="text-emerald-700 text-xs font-semibold whitespace-nowrap">6/6</span>
+                <ChevronDown className="w-3 h-3 text-emerald-600 shrink-0 hidden sm:inline" />
               </button>
 
               {/* Compact System Status Dropdown */}
               {isStatusOpen && (
-                <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-slate-200 p-4 space-y-3 z-50 text-xs animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-1.5rem)] bg-white rounded-2xl shadow-xl border border-slate-200 p-4 space-y-3 z-50 text-xs animate-in fade-in slide-in-from-top-1 duration-150">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
@@ -242,15 +246,15 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               )}
             </div>
 
-            {/* Demo Scenario Controller Dropdown */}
-            <div className="relative hidden sm:block" ref={scenarioRef}>
+            {/* Demo Scenario Controller Dropdown (Tablet & Desktop) */}
+            <div className="relative hidden md:block" ref={scenarioRef}>
               <button
                 onClick={() => setIsScenarioOpen(!isScenarioOpen)}
-                className="h-8 inline-flex items-center gap-1.5 px-2.5 bg-slate-100 hover:bg-slate-200/70 text-slate-800 rounded-lg border border-slate-200 text-xs font-medium transition-colors cursor-pointer shrink-0"
+                className="h-7.5 sm:h-8 inline-flex items-center gap-1.5 px-2 sm:px-2.5 bg-slate-100 hover:bg-slate-200/70 text-slate-800 rounded-lg border border-slate-200 text-xs font-medium transition-colors cursor-pointer shrink-0"
                 title="Switch demo scenarios"
               >
-                <span className="text-slate-500 text-[11px] hidden md:inline">Scenario:</span>
-                <span className="font-semibold text-slate-900 truncate max-w-[100px] md:max-w-[140px]">
+                <span className="text-slate-500 text-[11px] hidden xl:inline">Scenario:</span>
+                <span className="font-semibold text-slate-900 truncate max-w-[85px] lg:max-w-[125px]">
                   {activeScenarioObj.name}
                 </span>
                 <ChevronDown className="w-3 h-3 text-slate-500 shrink-0" />
@@ -258,7 +262,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
               {/* Scenario Selector Dropdown */}
               {isScenarioOpen && (
-                <div className="absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-slate-200 p-3 space-y-2 z-50 text-xs animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-1.5rem)] bg-white rounded-2xl shadow-xl border border-slate-200 p-3 space-y-2 z-50 text-xs animate-in fade-in slide-in-from-top-1 duration-150">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-2 px-1">
                     <div>
                       <strong className="text-slate-900 font-bold block">DEMO MODE CONTROLLER</strong>
@@ -364,20 +368,23 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               )}
             </div>
 
-            {/* Launch Guided Tour (Desktop) */}
+            {/* Launch Guided Tour (Desktop >= 1280px) */}
             <Button
               variant="outline"
               size="sm"
               onClick={openTour}
-              className="hidden xl:inline-flex h-8 border-indigo-200 text-indigo-700 hover:bg-indigo-50 text-xs shrink-0"
+              className="hidden xl:inline-flex h-7.5 sm:h-8 border-indigo-200 text-indigo-700 hover:bg-indigo-50 text-xs shrink-0"
             >
               <Play className="w-3 h-3 mr-1 text-indigo-600 fill-indigo-600 shrink-0" />
               <span>Judge Tour</span>
             </Button>
 
             {/* Merchant Persona Badge */}
-            <div className="flex items-center gap-2 pl-2 border-l border-slate-200 shrink-0">
-              <div className="w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center shadow-xs shrink-0 select-none">
+            <div className="flex items-center gap-1.5 pl-1.5 sm:pl-2 border-l border-slate-200 shrink-0">
+              <div
+                title={`${profile?.proprietor || 'Abhishek Kumar'} • ${profile?.businessName || 'Abhishek Mobile'}`}
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-900 text-white font-bold text-[10px] sm:text-xs flex items-center justify-center shadow-xs shrink-0 select-none cursor-default"
+              >
                 AK
               </div>
               <div className="hidden 2xl:block text-left">
@@ -393,20 +400,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </div>
       </div>
 
-      {/* Mobile Experience Switcher & Quick Navigation Drawer (when opened on small screens) */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 bg-white/98 backdrop-blur-md px-4 py-3 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150 shadow-lg">
+      {/* Mobile Menu Drawer (Active for Public Showcase) */}
+      {isMobileMenuOpen && activeWorld === 'showcase' && (
+        <div className="lg:hidden border-t border-slate-200 bg-white/98 backdrop-blur-md px-3.5 py-3 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150 shadow-lg">
+          {/* World Switcher Cards */}
           <div className="flex items-center gap-2 p-1 bg-slate-100 rounded-xl border border-slate-200/80">
             <button
               onClick={() => {
                 setActiveWorld('showcase');
                 setIsMobileMenuOpen(false);
               }}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                activeWorld === 'showcase'
-                  ? 'bg-white text-indigo-700 shadow-xs border border-slate-200/60'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold bg-white text-indigo-700 shadow-xs border border-slate-200/60 cursor-pointer"
             >
               <Presentation className="w-4 h-4 text-indigo-500 shrink-0" />
               <span>Public Showcase</span>
@@ -416,17 +420,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 setActiveWorld('app');
                 setIsMobileMenuOpen(false);
               }}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                activeWorld === 'app'
-                  ? 'bg-white text-indigo-700 shadow-xs border border-slate-200/60'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
             >
               <LayoutDashboard className="w-4 h-4 text-indigo-500 shrink-0" />
               <span>Command Center</span>
             </button>
           </div>
 
+          {/* Quick Action Grid */}
           <div className="grid grid-cols-2 gap-2 text-xs">
             <button
               onClick={() => {
@@ -449,6 +450,28 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               <span className="shrink-0">📱</span>
               <span>Morning Briefing</span>
             </button>
+          </div>
+
+          {/* Mobile Scenario Switcher Selector */}
+          <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5 text-xs">
+            <div className="flex items-center justify-between text-slate-700 font-semibold text-[11px]">
+              <span>DEMO SCENARIO</span>
+              <span className="text-[10px] text-slate-400 font-normal">Switch Simulation</span>
+            </div>
+            <select
+              value={activeScenario}
+              onChange={async (e) => {
+                await switchScenario(e.target.value as any);
+                setIsMobileMenuOpen(false);
+              }}
+              className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-800 focus:outline-none"
+            >
+              {DEMO_SCENARIOS.map((scen) => (
+                <option key={scen.id} value={scen.id}>
+                  {scen.name} — {scen.badge}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Quick Persona Info in Drawer */}

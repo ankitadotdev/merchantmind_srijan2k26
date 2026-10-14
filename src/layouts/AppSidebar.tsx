@@ -18,6 +18,9 @@ import {
   QrCode,
   Settings,
   AlertTriangle,
+  Presentation,
+  Play,
+  X,
 } from 'lucide-react';
 import { useMerchant } from '../context/MerchantContext';
 import { Badge } from '../components/ui/Badge';
@@ -34,6 +37,8 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
   const {
     activeAppTab,
     setActiveAppTab,
+    setActiveWorld,
+    openTour,
     payables,
     signals,
     opportunities,
@@ -201,7 +206,40 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
             className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          <div className="relative w-64 max-w-xs bg-white shadow-xl flex flex-col z-50">
+          <div className="relative w-72 max-w-[85vw] bg-white shadow-xl flex flex-col z-50">
+            {/* Mobile Drawer Header Controls */}
+            <div className="p-3 border-b border-slate-100 bg-slate-50 flex items-center justify-between gap-2">
+              <button
+                onClick={() => {
+                  setActiveWorld('showcase');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-indigo-700 shadow-2xs hover:bg-slate-50 cursor-pointer"
+              >
+                <Presentation className="w-3.5 h-3.5 text-indigo-500" />
+                <span>Showcase</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  openTour();
+                }}
+                className="flex items-center gap-1 px-2.5 py-1.5 bg-indigo-50 border border-indigo-200 rounded-lg text-xs font-semibold text-indigo-700 hover:bg-indigo-100 cursor-pointer"
+              >
+                <Play className="w-3 h-3 fill-indigo-600 text-indigo-600" />
+                <span>Tour</span>
+              </button>
+
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-1.5 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-200/60 cursor-pointer"
+                aria-label="Close menu"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
             {sidebarContent}
           </div>
         </div>
